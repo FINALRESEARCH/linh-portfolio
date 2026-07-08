@@ -1,0 +1,175 @@
+'use client'
+
+import {useCallback, useEffect, useRef, useState} from 'react'
+import Link from 'next/link'
+import type {SanityImageSource} from '@sanity/image-url'
+import {EffectFade, Keyboard} from 'swiper/modules'
+import {Swiper, SwiperSlide} from 'swiper/react'
+import type {Swiper as SwiperType} from 'swiper'
+import {SanityImage} from '@/components/SanityImage'
+import 'swiper/css'
+import 'swiper/css/effect-fade'
+
+type ProjectSlide = {
+  _id: string
+  title: string
+  slug: string
+  coverImage: SanityImageSource
+}
+
+type ProjectSwiperProps = {
+  projects: ProjectSlide[]
+}
+
+export function ProjectSwiper({projects}: ProjectSwiperProps) {
+  const [swiper, setSwiper] = useState<SwiperType | null>(null)
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  const autoplayIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const currentSlideIndexRef = useRef(0)
+
+  const updateProgressBar = useCallback(() => {
+    const progressBar = progressBarRef.current
+    if (!progressBar) return
+
+    progressBar.style.transition = 'none'
+    progressBar.style.width = '0%'
+    progressBar.offsetHeight
+    setTimeout(() => {
+      progressBar.style.transition = 'width 5000ms linear'
+      progressBar.style.width = '100%'
+    }, 10)
+  }, [])
+
+  const handleImageLoad = useCallback(() => {
+    const allImageLinks = document.querySelectorAll('.swiper-image-link')
+    allImageLinks.forEach((link) => link.classList.remove('loaded'))
+
+    const activeSlide = document.querySelector('.swiper-slide-active .swiper-image-link')
+    if (!activeSlide) return
+
+    const img = activeSlide.querySelector('img')
+    const loaded = () => {
+      setTimeout(() => activeSlide.classList.add('loaded'), 350)
+    }
+
+    activeSlide.classList.remove('loaded')
+    if (img?.complete) {
+      loaded()
+    } else if (img) {
+      img.addEventListener('load', loaded, {once: true})
+    }
+  }, [])
+
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (!swiper || !projects.length) return
+      const totalSlides = projects.length
+      const normalized = ((index % totalSlides) + totalSlides) % totalSlides
+      currentSlideIndexRef.current = normalized
+      swiper.slideTo(normalized)
+      updateProgressBar()
+      handleImageLoad()
+    },
+    [swiper, projects.length, updateProgressBar, handleImageLoad],
+  )
+
+  const goToNextSlide = useCallback(() => {
+    goToSlide(currentSlideIndexRef.current + 1)
+  }, [goToSlide])
+
+  const goToPrevSlide = useCallback(() => {
+    goToSlide(currentSlideIndexRef.current - 1)
+  }, [goToSlide])
+
+  const startAutoplay = useCallback(() => {
+    if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current)
+    autoplayIntervalRef.current = setInterval(goToNextSlide, 5000)
+  }, [goToNextSlide])
+
+  useEffect(() => {
+    if (!swiper) return
+
+    updateProgressBar()
+    handleImageLoad()
+    startAutoplay()
+
+    const onSlideChange = () => {
+      currentSlideIndexRef.current = swiper.realIndex
+      updateProgressBar()
+      handleImageLoad()
+    }
+
+    swiper.on('slideChange', onSlideChange)
+
+    return () => {
+      swiper.off('slideChange', onSlideChange)
+      if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current)
+    }
+  }, [swiper, updateProgressBar, handleImageLoad, startAutoplay])
+
+  const handleNavClick = (direction: 'next' | 'prev') => {
+    if (direction === 'next') goToNextSlide()
+    else goToPrevSlide()
+    if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current)
+    startAutoplay()
+  }
+
+  if (!projects.length) {
+    return (
+      <div className="images-wrapper">
+        <p className="fine-print">No projects yet.</p>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <div className="images-wrapper">
+        <Swiper
+          className="swiper swiper-projects"
+          modules={[EffectFade, Keyboard]}
+          centeredSlides
+          slidesPerView={1}
+          effect="fade"
+          fadeEffect={{crossFade: true}}
+          speed={0}
+          loop={false}
+          keyboard={{enabled: true}}
+          allowTouchMove={false}
+          onSwiper={setSwiper}
+        >
+          {projects.map((project) => (
+            <SwiperSlide key={project._id} className="swiper-slide">
+              <Link href={`/projects/${project.slug}`} className="swiper-image-link">
+                <SanityImage
+                  image={project.coverImage}
+                  alt={project.title}
+                  className="swiper-slide-image"
+                  sizes="(max-width: 479px) 100vw, 65vw"
+                />
+              </Link>
+              <div className="swiper-slide-title fine-print">{project.title}</div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <div className="swiper-navigation is-projects">
+          <button
+            type="button"
+            className="swiper-button-prev swiper-arrow"
+            aria-label="Previous project"
+            onClick={() => handleNavClick('prev')}
+          />
+          <button
+            type="button"
+            className="swiper-button-next swiper-arrow"
+            aria-label="Next project"
+            onClick={() => handleNavClick('next')}
+          />
+        </div>
+      </div>
+      <div className="swiper-progress-bar">
+        <div className="swiper-progress-bar-fill" ref={progressBarRef} />
+      </div>
+    </>
+  )
+}

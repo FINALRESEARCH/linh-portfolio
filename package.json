@@ -1,0 +1,17 @@
+{
+  "name": "linh-portfolio",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:web\" \"npm run dev:studio\"",
+    "dev:web": "npm run dev -w web",
+    "dev:studio": "npm run dev -w studio",
+    "build": "npm run build -w studio && npm run build -w web",
+    "typegen": "npm run typegen -w studio"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.3"
+  }
+}
