@@ -97,7 +97,7 @@ When `SANITY_API_READ_TOKEN` is set:
 - `ui/vercel.json` runs install/build from the monorepo root with `cd ..` (one level up from `ui`)
 - Do **not** use `cd ../..` — that escapes the repo on Vercel and fails with `ENOENT` for `/vercel/package.json`
 - Add all `ui/.env.local` variables in Vercel project settings
-- Set `NEXT_PUBLIC_SITE_URL` to your production domain
+- Set `NEXT_PUBLIC_SITE_URL` to your production domain (e.g. `https://your-app.vercel.app`)
 
 ### Sanity Studio (`cms`)
 

@@ -17,7 +17,15 @@ export type SiteIcons = {
 }
 
 export function getMetadataBase(): URL {
-  return new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return new URL(process.env.NEXT_PUBLIC_SITE_URL)
+  }
+
+  if (process.env.VERCEL_URL) {
+    return new URL(`https://${process.env.VERCEL_URL}`)
+  }
+
+  return new URL('http://localhost:3000')
 }
 
 export function getOgImageUrl(image?: SanityImageSource | null): string | undefined {
@@ -64,17 +72,11 @@ export function resolveLinkPreview({
 
 export function resolveSiteIcons({
   siteIcons,
-  metadataBase = getMetadataBase(),
 }: {
   siteIcons?: SiteIcons | null
-  metadataBase?: URL
 }) {
   return {
-    favicon:
-      getIconImageUrl(siteIcons?.favicon, 32) ??
-      new URL(DEFAULT_FAVICON_PATH, metadataBase).toString(),
-    appleTouchIcon:
-      getIconImageUrl(siteIcons?.appleTouchIcon, 180) ??
-      new URL(DEFAULT_APPLE_TOUCH_ICON_PATH, metadataBase).toString(),
+    favicon: getIconImageUrl(siteIcons?.favicon, 32),
+    appleTouchIcon: getIconImageUrl(siteIcons?.appleTouchIcon, 180),
   }
 }

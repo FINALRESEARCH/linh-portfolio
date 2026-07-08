@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+  async redirects() {
+    return [
+      {
+        source: '/favicon.ico',
+        destination: '/icon.png',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig

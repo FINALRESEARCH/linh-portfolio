@@ -17,10 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     fallbackDescription: siteTagline,
     metadataBase,
   })
-  const icons = resolveSiteIcons({
-    siteIcons: settings?.siteIcons,
-    metadataBase,
-  })
+  const customIcons = resolveSiteIcons({siteIcons: settings?.siteIcons})
 
   return {
     metadataBase,
@@ -30,8 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: preview.description,
     icons: {
-      icon: icons.favicon,
-      apple: icons.appleTouchIcon,
+      icon: customIcons.favicon ?? '/icon.png',
+      apple: customIcons.appleTouchIcon ?? '/apple-icon.png',
     },
     openGraph: {
       title: preview.title,
