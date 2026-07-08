@@ -6,9 +6,9 @@ export default defineCliConfig({
     dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   },
   typegen: {
-    path: '../web/src/**/*.{ts,tsx}',
+    path: '../ui/src/**/*.{ts,tsx}',
     schema: 'schema.json',
-    generates: '../web/sanity.types.ts',
+    generates: '../ui/sanity.types.ts',
     overloads: {
       generation: {
         mode: 'replace',

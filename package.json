@@ -1,17 +1,18 @@
 {
   "name": "linh-portfolio",
   "private": true,
+  "packageManager": "npm@10.9.2",
   "workspaces": [
-    "apps/*"
+    "cms",
+    "ui"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:web\" \"npm run dev:studio\"",
-    "dev:web": "npm run dev -w web",
-    "dev:studio": "npm run dev -w studio",
-    "build": "npm run build -w studio && npm run build -w web",
-    "typegen": "npm run typegen -w studio"
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "typegen": "turbo run typegen --filter=cms",
+    "lint": "turbo run lint --continue"
   },
   "devDependencies": {
-    "concurrently": "^9.2.3"
+    "turbo": "^2.5.5"
   }
 }

@@ -6,10 +6,10 @@ Rebuild of the Linh Thị Nguyễn stylist portfolio — migrated from Webflow t
 
 ```
 linh-portfolio/
-├── apps/
-│   ├── web/          # Next.js frontend (localhost:3000)
-│   └── studio/       # Sanity Studio (localhost:3333)
+├── ui/               # Next.js frontend (localhost:3000)
+├── cms/              # Sanity Studio (localhost:3333)
 ├── webflow-export/   # Original Webflow static export (reference only)
+├── turbo.json        # Turbo task pipeline
 └── package.json      # npm workspaces root
 ```
 
@@ -21,7 +21,7 @@ linh-portfolio/
 
 ## Environment variables
 
-### `apps/studio/.env.local`
+### `cms/.env.local`
 
 ```bash
 SANITY_STUDIO_PROJECT_ID=your-project-id
@@ -29,7 +29,7 @@ SANITY_STUDIO_DATASET=production
 SANITY_STUDIO_PREVIEW_ORIGIN=http://localhost:3000
 ```
 
-### `apps/web/.env.local`
+### `ui/.env.local`
 
 ```bash
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
@@ -46,9 +46,7 @@ Copy from root `.env.example` and each app's `.env.local.example`.
 
 ```bash
 npm install
-npm run dev          # runs web + studio concurrently
-npm run dev:web      # Next.js at http://localhost:3000
-npm run dev:studio   # Sanity Studio at http://localhost:3333
+npm run dev          # runs ui + cms through turbo
 ```
 
 ### CORS
@@ -56,7 +54,7 @@ npm run dev:studio   # Sanity Studio at http://localhost:3333
 Allow the Next.js app to fetch from Sanity:
 
 ```bash
-cd apps/studio
+cd cms
 npx sanity cors add http://localhost:3000 --credentials
 ```
 
@@ -71,7 +69,7 @@ npm run typegen      # regenerate TypeScript types from schemas + GROQ queries
 
 ## Client content entry
 
-1. Open Studio (`npm run dev:studio` or deployed `*.sanity.studio` URL)
+1. Open Studio (`npm run dev` then go to localhost:3333, or use deployed `*.sanity.studio` URL)
 2. Edit **Site Settings** — name, tagline, contact, social, copyright, OG image
 3. Create **Projects** — for each project:
    - Title, slug, order (sort position)
@@ -91,17 +89,17 @@ When `SANITY_API_READ_TOKEN` is set:
 
 ## Deployment
 
-### Next.js (`apps/web`) — Vercel
+### Next.js (`ui`) — Vercel
 
-- Set **Root Directory** to `apps/web` (or use the included `vercel.json`)
+- Set **Root Directory** to `ui` (or use the included `ui/vercel.json`)
 - Install command: `cd ../.. && npm install`
-- Add all `apps/web/.env.local` variables in Vercel project settings
+- Add all `ui/.env.local` variables in Vercel project settings
 - Set `NEXT_PUBLIC_SITE_URL` to your production domain
 
-### Sanity Studio (`apps/studio`)
+### Sanity Studio (`cms`)
 
 ```bash
-cd apps/studio
+cd cms
 npx sanity deploy
 ```
 
