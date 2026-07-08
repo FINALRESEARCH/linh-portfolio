@@ -13,6 +13,10 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
       title,
       description,
       "image": coalesce(image, ^.defaultOgImage)
+    },
+    siteIcons {
+      favicon,
+      appleTouchIcon
     }
   }
 `)

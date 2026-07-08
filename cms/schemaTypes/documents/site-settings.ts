@@ -55,6 +55,12 @@ export const siteSettings = defineType({
       type: 'linkPreview',
       description: 'Default social sharing preview for the site. Uses opengraph.jpg when no image is set.',
     }),
+    defineField({
+      name: 'siteIcons',
+      title: 'Site Icons',
+      type: 'siteIcons',
+      description: 'Favicon and Apple touch icon. Defaults to favicon.png and webclip.png.',
+    }),
   ],
   preview: {
     select: {title: 'name'},

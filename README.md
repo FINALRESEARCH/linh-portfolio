@@ -71,7 +71,7 @@ npm run typegen      # regenerate TypeScript types from schemas + GROQ queries
 ## Client content entry
 
 1. Open Studio (`npm run dev` then go to localhost:3333, or use deployed `*.sanity.studio` URL)
-2. Edit **Site Settings** — name, tagline, contact, social, copyright, link preview
+2. Edit **Site Settings** — name, tagline, contact, social, copyright, link preview, site icons
 3. Create **Projects** — for each project:
    - Title, slug, order (sort position)
    - Cover image (home carousel slide)

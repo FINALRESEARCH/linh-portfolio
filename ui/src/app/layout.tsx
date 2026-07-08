@@ -3,7 +3,7 @@ import {draftMode} from 'next/headers'
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {SanityLive} from '@/sanity/live'
 import {getSiteSettings} from '@/lib/data'
-import {getMetadataBase, resolveLinkPreview} from '@/lib/seo'
+import {getMetadataBase, resolveLinkPreview, resolveSiteIcons} from '@/lib/seo'
 import './globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -17,6 +17,10 @@ export async function generateMetadata(): Promise<Metadata> {
     fallbackDescription: siteTagline,
     metadataBase,
   })
+  const icons = resolveSiteIcons({
+    siteIcons: settings?.siteIcons,
+    metadataBase,
+  })
 
   return {
     metadataBase,
@@ -26,8 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: preview.description,
     icons: {
-      icon: '/images/favicon.png',
-      apple: '/images/webclip.png',
+      icon: icons.favicon,
+      apple: icons.appleTouchIcon,
     },
     openGraph: {
       title: preview.title,
