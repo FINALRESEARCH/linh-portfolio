@@ -1,4 +1,5 @@
-import {CogIcon, DocumentsIcon} from '@sanity/icons'
+import {CogIcon} from '@sanity/icons/Cog'
+import {DocumentsIcon} from '@sanity/icons/Documents'
 import type {StructureResolver} from 'sanity/structure'
 
 const SINGLETONS = ['siteSettings']
