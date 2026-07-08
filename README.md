@@ -8,15 +8,16 @@ Rebuild of the Linh Thị Nguyễn stylist portfolio — migrated from Webflow t
 linh-portfolio/
 ├── ui/               # Next.js frontend (localhost:3000)
 ├── cms/              # Sanity Studio (localhost:3333)
-├── webflow-export/   # Original Webflow static export (reference only)
+├── reference/        # Non-runtime reference material
+│   └── webflow/      # Original Webflow HTML/CSS/JS export
 ├── turbo.json        # Turbo task pipeline
 └── package.json      # npm workspaces root
 ```
 
 ## Prerequisites
 
-- Node.js 20+
-- npm 10+
+- Node.js 22.12+
+- npm 12+
 - A Sanity project ([sanity.io/manage](https://www.sanity.io/manage))
 
 ## Environment variables
@@ -107,4 +108,4 @@ Add your production URL to CORS origins after deploy.
 
 ## Reference
 
-The original Webflow export lives in `webflow-export/` for visual and markup reference.
+The original Webflow export lives in `reference/webflow/` for HTML, CSS, and markup reference. Static assets used by the site live in `ui/public/`.
