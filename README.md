@@ -92,8 +92,9 @@ When `SANITY_API_READ_TOKEN` is set:
 
 ### Next.js (`ui`) — Vercel
 
-- Set **Root Directory** to `ui` (or use the included `ui/vercel.json`)
-- Install command: `cd ../.. && npm install`
+- Set **Root Directory** to `ui`
+- `ui/vercel.json` runs install/build from the monorepo root with `cd ..` (one level up from `ui`)
+- Do **not** use `cd ../..` — that escapes the repo on Vercel and fails with `ENOENT` for `/vercel/package.json`
 - Add all `ui/.env.local` variables in Vercel project settings
 - Set `NEXT_PUBLIC_SITE_URL` to your production domain
 
