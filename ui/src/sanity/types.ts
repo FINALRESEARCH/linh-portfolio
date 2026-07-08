@@ -1,5 +1,6 @@
 import type {PortableTextBlock} from '@portabletext/types'
 import type {SanityImageSource} from '@sanity/image-url'
+import type {LinkPreview} from '@/lib/seo'
 
 export type SiteSettings = {
   name: string
@@ -9,7 +10,7 @@ export type SiteSettings = {
   copyrightYear: number
   creditName: string
   creditUrl: string
-  defaultOgImage?: SanityImageSource
+  linkPreview?: LinkPreview
 }
 
 export type ProjectListItem = {
@@ -23,6 +24,7 @@ export type ProjectListItem = {
 export type ProjectDetail = ProjectListItem & {
   gallery: SanityImageSource[]
   description?: PortableTextBlock[]
+  linkPreview?: LinkPreview
 }
 
 export type ProjectSlug = {

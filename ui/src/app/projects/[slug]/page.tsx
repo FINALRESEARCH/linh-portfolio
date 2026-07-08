@@ -4,9 +4,9 @@ import {sanityFetch} from '@/sanity/live'
 import {MobileProjectDescription, SidebarNav} from '@/components/SidebarNav'
 import {ProjectDetailSwiper} from '@/components/ProjectDetailSwiper'
 import {getProjects, getSiteSettings} from '@/lib/data'
+import {getMetadataBase, resolveLinkPreview} from '@/lib/seo'
 import {PROJECT_BY_SLUG_QUERY, PROJECT_SLUGS_QUERY} from '@/sanity/queries'
 import type {ProjectDetail} from '@/sanity/types'
-import {urlFor} from '@/sanity/lib/image'
 import {client} from '@/sanity/client'
 import {isSanityConfigured} from '@/sanity/env'
 
@@ -42,21 +42,28 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
 
   const settings = await getSiteSettings()
   const siteName = settings?.name || 'LINH THỊ NGUYỄN'
-  const ogImage = typedProject.coverImage
-    ? urlFor(typedProject.coverImage).width(1200).height(630).url()
-    : undefined
+  const metadataBase = getMetadataBase()
+  const preview = resolveLinkPreview({
+    linkPreview: typedProject.linkPreview,
+    fallbackTitle: typedProject.title,
+    fallbackDescription: `${typedProject.title} — ${siteName}`,
+    fallbackImage: typedProject.coverImage ?? settings?.linkPreview?.image,
+    metadataBase,
+  })
 
   return {
-    title: typedProject.title,
-    description: `${typedProject.title} — ${siteName}`,
+    title: preview.title,
+    description: preview.description,
     openGraph: {
-      title: typedProject.title,
-      images: ogImage ? [ogImage] : undefined,
+      title: preview.title,
+      description: preview.description,
+      images: [preview.image],
     },
     twitter: {
       card: 'summary_large_image',
-      title: typedProject.title,
-      images: ogImage ? [ogImage] : undefined,
+      title: preview.title,
+      description: preview.description,
+      images: [preview.image],
     },
   }
 }

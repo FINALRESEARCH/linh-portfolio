@@ -72,6 +72,12 @@ export const project = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'linkPreview',
+      title: 'Link Preview',
+      type: 'linkPreview',
+      description: 'Optional override for social sharing. Falls back to the cover image, then opengraph.jpg.',
+    }),
   ],
   orderings: [
     {

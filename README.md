@@ -71,14 +71,15 @@ npm run typegen      # regenerate TypeScript types from schemas + GROQ queries
 ## Client content entry
 
 1. Open Studio (`npm run dev` then go to localhost:3333, or use deployed `*.sanity.studio` URL)
-2. Edit **Site Settings** — name, tagline, contact, social, copyright, OG image
+2. Edit **Site Settings** — name, tagline, contact, social, copyright, link preview
 3. Create **Projects** — for each project:
    - Title, slug, order (sort position)
    - Cover image (home carousel slide)
    - Gallery images (detail page carousel, min 1)
    - Description (rich text)
+   - Link Preview (optional social sharing title, description, and image)
 
-The `order` field controls both the Work index and home Swiper sequence.
+The `order` field controls both the Work index and home Swiper sequence. Link previews fall back to the cover image, then the site default `opengraph.jpg`.
 
 ## Visual Editing (optional)
 

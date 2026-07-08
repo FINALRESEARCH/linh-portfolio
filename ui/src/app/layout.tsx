@@ -3,40 +3,43 @@ import {draftMode} from 'next/headers'
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {SanityLive} from '@/sanity/live'
 import {getSiteSettings} from '@/lib/data'
-import {urlFor} from '@/sanity/lib/image'
+import {getMetadataBase, resolveLinkPreview} from '@/lib/seo'
 import './globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
-  const title = settings?.name || 'LINH THỊ NGUYỄN'
-  const description = settings?.tagline || 'STYLIST'
-  const ogImage = settings?.defaultOgImage
-    ? urlFor(settings.defaultOgImage).width(1200).height(630).url()
-    : '/images/opengraph.jpg'
-  const metadataBase = new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+  const metadataBase = getMetadataBase()
+  const siteName = settings?.name || 'LINH THỊ NGUYỄN'
+  const siteTagline = settings?.tagline || 'STYLIST'
+  const preview = resolveLinkPreview({
+    linkPreview: settings?.linkPreview,
+    fallbackTitle: siteName,
+    fallbackDescription: siteTagline,
+    metadataBase,
+  })
 
   return {
     metadataBase,
     title: {
-      default: title,
-      template: `%s | ${title}`,
+      default: siteName,
+      template: `%s | ${siteName}`,
     },
-    description,
+    description: preview.description,
     icons: {
       icon: '/images/favicon.png',
       apple: '/images/webclip.png',
     },
     openGraph: {
-      title,
-      description,
-      images: [ogImage],
+      title: preview.title,
+      description: preview.description,
+      images: [preview.image],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title,
-      description,
-      images: [ogImage],
+      title: preview.title,
+      description: preview.description,
+      images: [preview.image],
     },
   }
 }

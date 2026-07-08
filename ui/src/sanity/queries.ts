@@ -9,7 +9,11 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     copyrightYear,
     creditName,
     creditUrl,
-    defaultOgImage
+    linkPreview {
+      title,
+      description,
+      "image": coalesce(image, ^.defaultOgImage)
+    }
   }
 `)
 
@@ -37,6 +41,11 @@ export const PROJECT_BY_SLUG_QUERY = defineQuery(`
     order,
     coverImage,
     gallery,
-    description
+    description,
+    linkPreview {
+      title,
+      description,
+      image
+    }
   }
 `)

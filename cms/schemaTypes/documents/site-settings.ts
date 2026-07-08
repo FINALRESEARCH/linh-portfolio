@@ -50,10 +50,10 @@ export const siteSettings = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'defaultOgImage',
-      title: 'Default Open Graph Image',
-      type: 'image',
-      options: {hotspot: true},
+      name: 'linkPreview',
+      title: 'Link Preview',
+      type: 'linkPreview',
+      description: 'Default social sharing preview for the site. Uses opengraph.jpg when no image is set.',
     }),
   ],
   preview: {
