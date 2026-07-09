@@ -1,9 +1,8 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
-import {sanityFetch} from '@/sanity/live'
 import {MobileProjectDescription, SidebarNav} from '@/components/SidebarNav'
 import {ProjectDetailSwiper} from '@/components/ProjectDetailSwiper'
-import {getProjects, getSiteSettings} from '@/lib/data'
+import {getProjects, getSiteSettings, fetchSanityData} from '@/lib/data'
 import {getMetadataBase, resolveLinkPreview} from '@/lib/seo'
 import {PROJECT_BY_SLUG_QUERY, PROJECT_SLUGS_QUERY} from '@/sanity/queries'
 import type {ProjectDetail} from '@/sanity/types'
@@ -30,11 +29,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const {slug} = await params
-  const {data: project} = await sanityFetch({
-    query: PROJECT_BY_SLUG_QUERY,
-    params: {slug},
-  })
-  const typedProject = project as ProjectDetail | null
+  const project = await fetchSanityData<ProjectDetail | null>(PROJECT_BY_SLUG_QUERY, {slug})
+  const typedProject = project
 
   if (!typedProject) {
     return {title: 'Project not found'}
@@ -70,13 +66,13 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
 
 export default async function ProjectPage({params}: PageProps) {
   const {slug} = await params
-  const [{data: project}, settings, projects] = await Promise.all([
-    sanityFetch({query: PROJECT_BY_SLUG_QUERY, params: {slug}}),
+  const [project, settings, projects] = await Promise.all([
+    fetchSanityData<ProjectDetail | null>(PROJECT_BY_SLUG_QUERY, {slug}),
     getSiteSettings(),
     getProjects(),
   ])
 
-  const typedProject = project as ProjectDetail | null
+  const typedProject = project
 
   if (!typedProject) notFound()
 
