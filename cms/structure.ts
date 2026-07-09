@@ -2,7 +2,7 @@ import {CogIcon} from '@sanity/icons/Cog'
 import {DocumentsIcon} from '@sanity/icons/Documents'
 import type {StructureResolver} from 'sanity/structure'
 
-const SINGLETONS = ['siteSettings']
+const STRUCTURED_TYPE_IDS = ['siteSettings', 'project']
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -27,6 +27,6 @@ export const structure: StructureResolver = (S) =>
             .defaultOrdering([{field: 'order', direction: 'asc'}]),
         ),
       ...S.documentTypeListItems().filter(
-        (listItem) => !SINGLETONS.includes(listItem.getId() || ''),
+        (listItem) => !STRUCTURED_TYPE_IDS.includes(listItem.getId() || ''),
       ),
     ])
