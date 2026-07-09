@@ -284,6 +284,19 @@ a:hover {
   opacity: 1;
 }
 
+.nav-wrapper.project .nav-link-project:not(.is-current) {
+  opacity: 0.3;
+}
+
+.nav-wrapper.project .nav-link-project:not(.is-current):hover {
+  opacity: 1;
+}
+
+.nav-wrapper.project .nav-link-project.is-current,
+.nav-wrapper.project .nav-link-project.is-current:hover {
+  opacity: 1;
+}
+
 .images-wrapper.is-project-gallery .swiper-image-link {
   cursor: none;
   position: relative;
