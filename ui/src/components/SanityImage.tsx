@@ -7,6 +7,7 @@ type SanityImageProps = {
   alt: string
   className?: string
   priority?: boolean
+  loading?: 'lazy' | 'eager'
   sizes?: string
 }
 
@@ -15,6 +16,7 @@ export function SanityImage({
   alt,
   className,
   priority = false,
+  loading,
   sizes = '(max-width: 479px) 100vw, 65vw',
 }: SanityImageProps) {
   const imageBuilder = urlFor(image).auto('format')
@@ -31,6 +33,7 @@ export function SanityImage({
       height={2000}
       sizes={sizes}
       priority={priority}
+      loading={loading}
       style={{width: 'auto', height: '100%', objectFit: 'contain'}}
     />
   )

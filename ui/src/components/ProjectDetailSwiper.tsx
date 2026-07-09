@@ -2,7 +2,7 @@
 
 import {useCallback, useEffect, useState} from 'react'
 import type {SanityImageSource} from '@sanity/image-url'
-import {EffectFade, Keyboard, Navigation} from 'swiper/modules'
+import {EffectFade, Keyboard} from 'swiper/modules'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import type {Swiper as SwiperType} from 'swiper'
 import {SanityImage} from '@/components/SanityImage'
@@ -18,28 +18,18 @@ type ProjectDetailSwiperProps = {
 export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
   const [swiper, setSwiper] = useState<SwiperType | null>(null)
 
-  const resetSlides = useCallback(() => {
-    document.querySelectorAll('.swiper-image-link').forEach((link) => {
-      link.classList.remove('loaded')
-    })
-    document.querySelectorAll('.swiper-slide').forEach((slide) => {
-      ;(slide as HTMLElement).style.opacity = '0'
-    })
-    const activeSlide = document.querySelector('.swiper-slide-active')
-    if (activeSlide) {
-      ;(activeSlide as HTMLElement).style.opacity = '1'
-    }
-  }, [])
+  const handleImageLoad = useCallback(() => {
+    document.querySelectorAll('.swiper-image-link').forEach((link) => link.classList.remove('loaded'))
 
-  const handleImageLoad = useCallback((container?: Element | null) => {
-    const target = container || document.querySelector('.swiper-slide-active .swiper-image-link')
-    if (!target) return
+    const activeSlide = document.querySelector('.swiper-slide-active .swiper-image-link')
+    if (!activeSlide) return
 
-    const img = target.querySelector('img')
+    const img = activeSlide.querySelector('img')
     const loaded = () => {
-      setTimeout(() => target.classList.add('loaded'), 350)
+      setTimeout(() => activeSlide.classList.add('loaded'), 350)
     }
 
+    activeSlide.classList.remove('loaded')
     if (img?.complete) loaded()
     else if (img) img.addEventListener('load', loaded, {once: true})
   }, [])
@@ -47,29 +37,18 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
   useEffect(() => {
     if (!swiper) return
 
-    const onInit = () => {
-      swiper.slides.forEach((slide) => {
-        ;(slide as HTMLElement).style.opacity = '0'
-      })
-      const active = swiper.slides[swiper.activeIndex]
-      if (active) (active as HTMLElement).style.opacity = '1'
-      handleImageLoad()
-    }
+    handleImageLoad()
 
     const onSlideChange = () => {
-      resetSlides()
       handleImageLoad()
     }
 
-    swiper.on('init', onInit)
-    swiper.on('slideChangeTransitionStart', onSlideChange)
-    onInit()
+    swiper.on('slideChange', onSlideChange)
 
     return () => {
-      swiper.off('init', onInit)
-      swiper.off('slideChangeTransitionStart', onSlideChange)
+      swiper.off('slideChange', onSlideChange)
     }
-  }, [swiper, resetSlides, handleImageLoad])
+  }, [swiper, handleImageLoad])
 
   if (!images.length) {
     return (
@@ -85,19 +64,15 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
       <div className="images-wrapper">
         <Swiper
           className="swiper swiper-projects"
-          modules={[EffectFade, Keyboard, Navigation]}
+          modules={[EffectFade, Keyboard]}
           centeredSlides
           slidesPerView={1}
           effect="fade"
           fadeEffect={{crossFade: true}}
           speed={0}
-          loop
+          loop={images.length >= 3}
           keyboard={{enabled: true}}
           allowTouchMove={false}
-          navigation={{
-            nextEl: '.swiper-button-next.swiper-arrow',
-            prevEl: '.swiper-button-prev.swiper-arrow',
-          }}
           onSwiper={setSwiper}
         >
           {images.map((image, index) => (
@@ -108,6 +83,8 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
                   alt={`${title} — image ${index + 1}`}
                   className="swiper-slide-image project"
                   sizes="(max-width: 479px) 100vw, 65vw"
+                  priority={index === 0}
+                  loading="eager"
                 />
                 <div className="swiper-project-image-nav">
                   <button
