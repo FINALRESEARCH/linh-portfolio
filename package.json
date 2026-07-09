@@ -6,7 +6,8 @@
     "node": ">=22.12"
   },
   "overrides": {
-    "sanity": "^6.4.0"
+    "sanity": "^6.4.0",
+    "react-is": "^19.2.7"
   },
   "workspaces": [
     "cms",
