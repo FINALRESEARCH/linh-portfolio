@@ -133,14 +133,6 @@ a:hover {
   overflow: hidden;
 }
 
-.swiper-slide.project {
-  width: 100%;
-}
-
-.swiper.swiper-projects:not(.swiper-initialized) .swiper-slide:not(:first-child) {
-  display: none;
-}
-
 .swiper-wrapper {
   height: 100%;
   display: flex;
@@ -187,11 +179,6 @@ a:hover {
 }
 
 .swiper-image-link.loaded > img {
-  visibility: visible;
-  opacity: 1;
-}
-
-.swiper-image-link.project > img {
   visibility: visible;
   opacity: 1;
 }

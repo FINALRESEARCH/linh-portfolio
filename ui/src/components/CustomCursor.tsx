@@ -21,7 +21,7 @@ export function CustomCursor({swiper}: CustomCursorProps) {
       return
     }
 
-    const slides = document.querySelectorAll('.swiper-image-link.project')
+    const slides = document.querySelectorAll('.images-wrapper .swiper-image-link')
 
     const updateCursorPosition = (event: MouseEvent) => {
       cursor.style.left = `${event.clientX + 10}px`

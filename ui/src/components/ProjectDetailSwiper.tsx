@@ -30,9 +30,23 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
     }
 
     activeSlide.classList.remove('loaded')
-    if (img?.complete) loaded()
-    else if (img) img.addEventListener('load', loaded, {once: true})
+    if (img?.complete) {
+      loaded()
+    } else if (img) {
+      img.addEventListener('load', loaded, {once: true})
+    }
   }, [])
+
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (!swiper || !images.length) return
+      const totalSlides = images.length
+      const normalized = ((index % totalSlides) + totalSlides) % totalSlides
+      swiper.slideTo(normalized)
+      handleImageLoad()
+    },
+    [swiper, images.length, handleImageLoad],
+  )
 
   useEffect(() => {
     if (!swiper) return
@@ -49,6 +63,13 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
       swiper.off('slideChange', onSlideChange)
     }
   }, [swiper, handleImageLoad])
+
+  const handleNavClick = (direction: 'next' | 'prev') => {
+    if (!swiper) return
+    if (direction === 'next') swiper.slideNext()
+    else swiper.slidePrev()
+    handleImageLoad()
+  }
 
   if (!images.length) {
     return (
@@ -70,36 +91,22 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
           effect="fade"
           fadeEffect={{crossFade: true}}
           speed={0}
-          loop={images.length >= 3}
+          loop={false}
           keyboard={{enabled: true}}
           allowTouchMove={false}
           onSwiper={setSwiper}
         >
           {images.map((image, index) => (
-            <SwiperSlide key={`${title}-${index}`} className="swiper-slide project">
-              <div className="swiper-image-link project">
+            <SwiperSlide key={`${title}-${index}`} className="swiper-slide">
+              <div className="swiper-image-link">
                 <SanityImage
                   image={image}
                   alt={`${title} — image ${index + 1}`}
-                  className="swiper-slide-image project"
+                  className="swiper-slide-image"
                   sizes="(max-width: 479px) 100vw, 65vw"
                   priority={index === 0}
-                  loading="eager"
+                  loading={index === 0 ? 'eager' : 'lazy'}
                 />
-                <div className="swiper-project-image-nav">
-                  <button
-                    type="button"
-                    className="swiper-project-image-nav-prev"
-                    aria-label="Previous image"
-                    onClick={() => swiper?.slidePrev()}
-                  />
-                  <button
-                    type="button"
-                    className="swiper-project-image-nav-next"
-                    aria-label="Next image"
-                    onClick={() => swiper?.slideNext()}
-                  />
-                </div>
               </div>
             </SwiperSlide>
           ))}
@@ -109,13 +116,13 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
             type="button"
             className="swiper-button-prev swiper-arrow"
             aria-label="Previous image"
-            onClick={() => swiper?.slidePrev()}
+            onClick={() => handleNavClick('prev')}
           />
           <button
             type="button"
             className="swiper-button-next swiper-arrow"
             aria-label="Next image"
-            onClick={() => swiper?.slideNext()}
+            onClick={() => handleNavClick('next')}
           />
         </div>
       </div>

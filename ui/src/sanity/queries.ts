@@ -27,7 +27,13 @@ export const PROJECTS_LIST_QUERY = defineQuery(`
     title,
     "slug": slug.current,
     order,
-    coverImage
+    coverImage{
+      ...,
+      asset->{
+        _id,
+        metadata { dimensions { width, height } }
+      }
+    }
   }
 `)
 
@@ -43,8 +49,20 @@ export const PROJECT_BY_SLUG_QUERY = defineQuery(`
     title,
     "slug": slug.current,
     order,
-    coverImage,
-    gallery,
+    coverImage{
+      ...,
+      asset->{
+        _id,
+        metadata { dimensions { width, height } }
+      }
+    },
+    gallery[]{
+      ...,
+      asset->{
+        _id,
+        metadata { dimensions { width, height } }
+      }
+    },
     description,
     linkPreview {
       title,
