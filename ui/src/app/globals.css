@@ -280,18 +280,39 @@ a:hover {
   opacity: 1;
 }
 
+.images-wrapper.is-project-gallery .swiper-image-link {
+  cursor: none;
+  position: relative;
+}
+
 .custom-cursor {
   z-index: 9999;
   pointer-events: none;
   color: #fff;
   mix-blend-mode: difference;
+  font-family: BALINHCIAGA-PRO, Arial, sans-serif;
   font-size: 1.5rem;
+  font-weight: 500;
   line-height: 2rem;
+  letter-spacing: -0.015rem;
+  text-transform: none;
   position: fixed;
   opacity: 0;
+  white-space: nowrap;
+}
+
+.custom-cursor.is-visible {
+  opacity: 1;
+}
+
+@media screen and (max-width: 1023px) {
+  .custom-cursor {
+    display: none;
+  }
 }
 
 .swiper-project-image-nav {
+  z-index: 1;
   justify-content: space-between;
   display: flex;
   position: absolute;
@@ -301,6 +322,11 @@ a:hover {
 .swiper-project-image-nav-prev,
 .swiper-project-image-nav-next {
   width: 50%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
   cursor: none;
 }
 

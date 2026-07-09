@@ -1,78 +1,87 @@
 'use client'
 
-import {useEffect} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import type {Swiper as SwiperType} from 'swiper'
 
 type CustomCursorProps = {
   swiper: SwiperType | null
+  totalImages: number
 }
 
 function isDesktop() {
   return typeof window !== 'undefined' && window.innerWidth >= 1024
 }
 
-export function CustomCursor({swiper}: CustomCursorProps) {
+function formatSlideLabel(index: number, total: number) {
+  return `${index + 1} / ${total}`
+}
+
+export function CustomCursor({swiper, totalImages}: CustomCursorProps) {
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const [slideIndex, setSlideIndex] = useState(0)
+  const [visible, setVisible] = useState(false)
+
   useEffect(() => {
-    const cursor = document.querySelector('.custom-cursor') as HTMLElement | null
-    if (!cursor) return
-
-    if (!isDesktop()) {
-      cursor.style.display = 'none'
-      return
-    }
-
-    const slides = document.querySelectorAll('.images-wrapper .swiper-image-link')
-
-    const updateCursorPosition = (event: MouseEvent) => {
-      cursor.style.left = `${event.clientX + 10}px`
-      cursor.style.top = `${event.clientY + 10}px`
-    }
-
-    const updateCursorText = (slide: Element) => {
-      const parentSlide = slide.closest('.swiper-slide')
-      const ariaLabel = parentSlide?.getAttribute('aria-label')
-      if (ariaLabel) cursor.textContent = ariaLabel
-    }
-
-    const onMouseEnter = (event: Event) => {
-      const slide = event.currentTarget as Element
-      updateCursorText(slide)
-      cursor.style.opacity = '1'
-    }
-
-    const onMouseLeave = () => {
-      cursor.style.opacity = '0'
-    }
-
-    const onMouseMove = (event: Event) => {
-      updateCursorPosition(event as MouseEvent)
-    }
-
-    slides.forEach((slide) => {
-      slide.addEventListener('mouseenter', onMouseEnter)
-      slide.addEventListener('mouseleave', onMouseLeave)
-      slide.addEventListener('mousemove', onMouseMove)
-    })
-
-    document.addEventListener('mousemove', updateCursorPosition)
+    if (!swiper) return
 
     const onSlideChange = () => {
-      const activeSlide = document.querySelector('.swiper-slide-active .swiper-image-link')
-      if (activeSlide) updateCursorText(activeSlide)
+      setSlideIndex(swiper.realIndex)
     }
 
-    swiper?.on('slideChangeTransitionStart', onSlideChange)
+    swiper.on('slideChange', onSlideChange)
 
     return () => {
-      slides.forEach((slide) => {
-        slide.removeEventListener('mouseenter', onMouseEnter)
-        slide.removeEventListener('mouseleave', onMouseLeave)
-        slide.removeEventListener('mousemove', onMouseMove)
-      })
-      document.removeEventListener('mousemove', updateCursorPosition)
-      swiper?.off('slideChangeTransitionStart', onSlideChange)
+      swiper.off('slideChange', onSlideChange)
     }
   }, [swiper])
 
-  return <div className="custom-cursor" />
+  useEffect(() => {
+    if (!isDesktop()) return
+
+    const slides = document.querySelectorAll(
+      '.images-wrapper.is-project-gallery .swiper-image-link',
+    )
+
+    const onEnter = () => {
+      if (swiper) setSlideIndex(swiper.realIndex)
+      setVisible(true)
+    }
+
+    const onLeave = () => setVisible(false)
+
+    const onMove = (event: Event) => {
+      const cursor = cursorRef.current
+      if (!cursor) return
+      const {clientX, clientY} = event as MouseEvent
+      cursor.style.left = `${clientX + 10}px`
+      cursor.style.top = `${clientY + 10}px`
+    }
+
+    slides.forEach((slide) => {
+      slide.addEventListener('mouseenter', onEnter)
+      slide.addEventListener('mouseleave', onLeave)
+      slide.addEventListener('mousemove', onMove)
+    })
+
+    document.addEventListener('mousemove', onMove)
+
+    return () => {
+      slides.forEach((slide) => {
+        slide.removeEventListener('mouseenter', onEnter)
+        slide.removeEventListener('mouseleave', onLeave)
+        slide.removeEventListener('mousemove', onMove)
+      })
+      document.removeEventListener('mousemove', onMove)
+    }
+  }, [swiper])
+
+  return (
+    <div
+      ref={cursorRef}
+      className={`custom-cursor${visible ? ' is-visible' : ''}`}
+      aria-hidden="true"
+    >
+      {formatSlideLabel(slideIndex, totalImages)}
+    </div>
+  )
 }

@@ -37,17 +37,6 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
     }
   }, [])
 
-  const goToSlide = useCallback(
-    (index: number) => {
-      if (!swiper || !images.length) return
-      const totalSlides = images.length
-      const normalized = ((index % totalSlides) + totalSlides) % totalSlides
-      swiper.slideTo(normalized)
-      handleImageLoad()
-    },
-    [swiper, images.length, handleImageLoad],
-  )
-
   useEffect(() => {
     if (!swiper) return
 
@@ -81,8 +70,8 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
 
   return (
     <>
-      <CustomCursor swiper={swiper} />
-      <div className="images-wrapper">
+      <CustomCursor swiper={swiper} totalImages={images.length} />
+      <div className="images-wrapper is-project-gallery">
         <Swiper
           className="swiper swiper-projects"
           modules={[EffectFade, Keyboard]}
@@ -91,7 +80,7 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
           effect="fade"
           fadeEffect={{crossFade: true}}
           speed={0}
-          loop={false}
+          loop={images.length > 1}
           keyboard={{enabled: true}}
           allowTouchMove={false}
           onSwiper={setSwiper}
@@ -107,6 +96,20 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
                   priority={index === 0}
                   loading={index === 0 ? 'eager' : 'lazy'}
                 />
+                <div className="swiper-project-image-nav">
+                  <button
+                    type="button"
+                    className="swiper-project-image-nav-prev"
+                    aria-label="Previous image"
+                    onClick={() => handleNavClick('prev')}
+                  />
+                  <button
+                    type="button"
+                    className="swiper-project-image-nav-next"
+                    aria-label="Next image"
+                    onClick={() => handleNavClick('next')}
+                  />
+                </div>
               </div>
             </SwiperSlide>
           ))}
