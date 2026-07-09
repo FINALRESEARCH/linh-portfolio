@@ -10,6 +10,8 @@ import {SanityImage} from '@/components/SanityImage'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 
+const AUTOPLAY_DURATION_MS = 10000
+
 type ProjectSlide = {
   _id: string
   title: string
@@ -33,9 +35,9 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
 
     progressBar.style.transition = 'none'
     progressBar.style.width = '0%'
-    progressBar.offsetHeight
+    void progressBar.offsetHeight
     setTimeout(() => {
-      progressBar.style.transition = 'width 5000ms linear'
+      progressBar.style.transition = `width ${AUTOPLAY_DURATION_MS}ms linear`
       progressBar.style.width = '100%'
     }, 10)
   }, [])
@@ -83,7 +85,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
 
   const startAutoplay = useCallback(() => {
     if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current)
-    autoplayIntervalRef.current = setInterval(goToNextSlide, 5000)
+    autoplayIntervalRef.current = setInterval(goToNextSlide, AUTOPLAY_DURATION_MS)
   }, [goToNextSlide])
 
   useEffect(() => {
