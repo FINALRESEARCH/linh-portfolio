@@ -269,14 +269,18 @@ a:hover {
 }
 
 .nav-link-project {
-  opacity: 0.3;
-}
-
-.nav-link-project:hover {
   opacity: 1;
 }
 
+.nav-link-project:hover {
+  opacity: 0.3;
+}
+
 .nav-link-project.is-current {
+  opacity: 1;
+}
+
+.nav-link-project.is-current:hover {
   opacity: 1;
 }
 
