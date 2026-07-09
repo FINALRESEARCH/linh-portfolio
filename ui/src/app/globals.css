@@ -218,26 +218,27 @@ a:hover {
 }
 
 .swiper-arrow {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
   width: 1rem;
   height: 1rem;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .swiper-arrow.swiper-button-prev {
   background-image: url('/images/CHEVRON-LEFT.svg');
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 1rem;
-  height: 1rem;
 }
 
 .swiper-arrow.swiper-button-next {
   background-image: url('/images/CHEVRON-RIGHT.svg');
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 1rem;
-  height: 1rem;
 }
 
 .swiper-button-next.swiper-arrow {
@@ -248,7 +249,8 @@ a:hover {
   inset: auto 2px 10px auto;
 }
 
-.swiper-button-next.swiper-arrow:hover {
+.swiper-button-next.swiper-arrow:hover,
+.swiper-button-prev.swiper-arrow:hover {
   opacity: 0.3;
 }
 
@@ -260,7 +262,6 @@ a:hover {
   inset: auto 30px 10px auto;
 }
 
-.swiper-button-prev.swiper-arrow:hover,
 .nav-link-project {
   opacity: 0.3;
 }
