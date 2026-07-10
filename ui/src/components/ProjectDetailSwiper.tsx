@@ -2,7 +2,7 @@
 
 import {useCallback, useEffect, useState} from 'react'
 import type {SanityImageSource} from '@sanity/image-url'
-import {EffectFade, Keyboard} from 'swiper/modules'
+import {EffectFade} from 'swiper/modules'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import type {Swiper as SwiperType} from 'swiper'
 import {SanityImage} from '@/components/SanityImage'
@@ -17,6 +17,7 @@ type ProjectDetailSwiperProps = {
 
 export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
   const [swiper, setSwiper] = useState<SwiperType | null>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
 
   const handleImageLoad = useCallback(() => {
     document.querySelectorAll('.swiper-image-link').forEach((link) => link.classList.remove('loaded'))
@@ -43,6 +44,7 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
     handleImageLoad()
 
     const onSlideChange = () => {
+      setActiveIndex(swiper.activeIndex)
       handleImageLoad()
     }
 
@@ -53,12 +55,32 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
     }
   }, [swiper, handleImageLoad])
 
-  const handleNavClick = (direction: 'next' | 'prev') => {
-    if (!swiper) return
-    if (direction === 'next') swiper.slideNext()
-    else swiper.slidePrev()
-    handleImageLoad()
-  }
+  const handleNavClick = useCallback(
+    (direction: 'next' | 'prev') => {
+      if (!swiper || !images.length) return
+
+      const total = images.length
+      const nextIndex =
+        direction === 'next'
+          ? (swiper.activeIndex + 1) % total
+          : (swiper.activeIndex - 1 + total) % total
+
+      swiper.slideTo(nextIndex)
+      setActiveIndex(nextIndex)
+      handleImageLoad()
+    },
+    [swiper, images.length, handleImageLoad],
+  )
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') handleNavClick('next')
+      if (event.key === 'ArrowLeft') handleNavClick('prev')
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [handleNavClick])
 
   if (!images.length) {
     return (
@@ -70,18 +92,17 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
 
   return (
     <>
-      <CustomCursor swiper={swiper} totalImages={images.length} />
+      <CustomCursor currentIndex={activeIndex} totalImages={images.length} />
       <div className="images-wrapper is-project-gallery">
         <Swiper
           className="swiper swiper-projects"
-          modules={[EffectFade, Keyboard]}
+          modules={[EffectFade]}
           centeredSlides
           slidesPerView={1}
           effect="fade"
           fadeEffect={{crossFade: true}}
           speed={0}
-          loop={images.length > 1}
-          keyboard={{enabled: true}}
+          loop={false}
           allowTouchMove={false}
           onSwiper={setSwiper}
         >

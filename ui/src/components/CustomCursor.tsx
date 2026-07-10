@@ -1,10 +1,9 @@
 'use client'
 
 import {useEffect, useRef, useState} from 'react'
-import type {Swiper as SwiperType} from 'swiper'
 
 type CustomCursorProps = {
-  swiper: SwiperType | null
+  currentIndex: number
   totalImages: number
 }
 
@@ -16,24 +15,9 @@ function formatSlideLabel(index: number, total: number) {
   return `${index + 1} / ${total}`
 }
 
-export function CustomCursor({swiper, totalImages}: CustomCursorProps) {
+export function CustomCursor({currentIndex, totalImages}: CustomCursorProps) {
   const cursorRef = useRef<HTMLDivElement>(null)
-  const [slideIndex, setSlideIndex] = useState(0)
   const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    if (!swiper) return
-
-    const onSlideChange = () => {
-      setSlideIndex(swiper.realIndex)
-    }
-
-    swiper.on('slideChange', onSlideChange)
-
-    return () => {
-      swiper.off('slideChange', onSlideChange)
-    }
-  }, [swiper])
 
   useEffect(() => {
     if (!isDesktop()) return
@@ -42,11 +26,7 @@ export function CustomCursor({swiper, totalImages}: CustomCursorProps) {
       '.images-wrapper.is-project-gallery .swiper-image-link',
     )
 
-    const onEnter = () => {
-      if (swiper) setSlideIndex(swiper.realIndex)
-      setVisible(true)
-    }
-
+    const onEnter = () => setVisible(true)
     const onLeave = () => setVisible(false)
 
     const onMove = (event: Event) => {
@@ -73,7 +53,7 @@ export function CustomCursor({swiper, totalImages}: CustomCursorProps) {
       })
       document.removeEventListener('mousemove', onMove)
     }
-  }, [swiper])
+  }, [])
 
   return (
     <div
@@ -81,7 +61,7 @@ export function CustomCursor({swiper, totalImages}: CustomCursorProps) {
       className={`custom-cursor${visible ? ' is-visible' : ''}`}
       aria-hidden="true"
     >
-      {formatSlideLabel(slideIndex, totalImages)}
+      {formatSlideLabel(currentIndex, totalImages)}
     </div>
   )
 }
