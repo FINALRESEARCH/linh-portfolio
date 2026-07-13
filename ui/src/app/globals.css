@@ -222,6 +222,10 @@ a:hover {
   inset: auto 10px 10px auto;
 }
 
+.swiper-mobile-footer {
+  display: none;
+}
+
 .swiper-arrow {
   background-color: transparent;
   border: none;
@@ -497,27 +501,35 @@ a:hover {
     vertical-align: middle;
   }
 
-  .swiper-slide-title.fine-print {
-    position: relative;
-    inset: auto;
-    width: auto;
-    max-width: 70%;
-    min-height: 1.5rem;
-    margin: 0.5rem 0 0;
-    padding: 0 0 0 8px;
-    display: flex;
-    align-items: center;
+  .swiper-slide > .swiper-slide-title.fine-print {
+    display: none;
   }
 
-  .swiper-navigation.is-projects {
-    grid-column-gap: 0;
-    grid-row-gap: 0;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+  .images-wrapper > .swiper-navigation.is-desktop {
+    display: none;
+  }
+
+  .swiper-mobile-footer {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    height: 1.5rem;
-    padding-right: 8px;
+    width: 100%;
+    padding: 0.5rem 8px 0;
+    gap: 1rem;
+  }
+
+  .swiper-mobile-title {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .swiper-mobile-footer .swiper-navigation.is-projects {
+    position: static;
+    inset: auto;
+    flex-shrink: 0;
+    height: auto;
+    padding: 0;
   }
 
   .nav-section.project-description.mobile {

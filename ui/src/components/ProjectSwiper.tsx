@@ -25,6 +25,7 @@ type ProjectSwiperProps = {
 
 export function ProjectSwiper({projects}: ProjectSwiperProps) {
   const [swiper, setSwiper] = useState<SwiperType | null>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const autoplayIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const currentSlideIndexRef = useRef(0)
@@ -68,6 +69,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
       const totalSlides = projects.length
       const normalized = ((index % totalSlides) + totalSlides) % totalSlides
       currentSlideIndexRef.current = normalized
+      setActiveIndex(normalized)
       swiper.slideTo(normalized)
       updateProgressBar()
       handleImageLoad()
@@ -97,6 +99,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
 
     const onSlideChange = () => {
       currentSlideIndexRef.current = swiper.realIndex
+      setActiveIndex(swiper.activeIndex)
       updateProgressBar()
       handleImageLoad()
     }
@@ -154,7 +157,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="swiper-navigation is-projects">
+        <div className="swiper-navigation is-projects is-desktop">
           <button
             type="button"
             className="swiper-button-prev swiper-arrow"
@@ -167,6 +170,25 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
             aria-label="Next project"
             onClick={() => handleNavClick('next')}
           />
+        </div>
+        <div className="swiper-mobile-footer">
+          <div className="swiper-mobile-title fine-print">
+            {projects[activeIndex]?.title}
+          </div>
+          <div className="swiper-navigation is-projects">
+            <button
+              type="button"
+              className="swiper-button-prev swiper-arrow"
+              aria-label="Previous project"
+              onClick={() => handleNavClick('prev')}
+            />
+            <button
+              type="button"
+              className="swiper-button-next swiper-arrow"
+              aria-label="Next project"
+              onClick={() => handleNavClick('next')}
+            />
+          </div>
         </div>
       </div>
       <div className="swiper-progress-bar">
