@@ -87,7 +87,12 @@ a:hover {
 }
 
 .nav-section.copyright.project {
-  position: static;
+  position: absolute;
+  inset: auto auto 10px 10px;
+}
+
+.nav-section.project-description.desktop {
+  max-width: 25dvw;
 }
 
 .nav-section.project-description.mobile {
@@ -438,6 +443,10 @@ a:hover {
     grid-column-gap: 6svh;
     grid-row-gap: 6svh;
     padding-top: 6svh;
+  }
+
+  .nav-top-section.project {
+    display: contents;
   }
 
   .nav-section.index {

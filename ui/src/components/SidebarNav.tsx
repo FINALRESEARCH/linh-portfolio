@@ -31,91 +31,50 @@ export function SidebarNav({
 
   return (
     <div className={`nav-wrapper${isProject ? ' project' : ''}`}>
-      {isProject ? (
-        <>
-          <div className="nav-section bio project">
-            <Link href="/">{name}</Link>
-            <div>{tagline}</div>
-          </div>
-          <div className="nav-section index">
-            <div>Work</div>
-            <div className="nav-index-wrapper">
-              <div className="nav-index-list projects">
-                {projects.map((project) => (
-                  <NavProjectLink
-                    key={project._id}
-                    title={project.title}
-                    slug={project.slug}
-                    isCurrent={project.slug === currentSlug}
-                  />
-                ))}
-              </div>
+      <div className={`nav-top-section${isProject ? ' project' : ''}`}>
+        <div className={`nav-section bio${isProject ? ' project' : ''}`}>
+          <Link href="/" aria-current={isProject ? undefined : 'page'}>
+            {name}
+          </Link>
+          <div>{tagline}</div>
+        </div>
+        <div className="nav-section index">
+          <div className="text-block">Work</div>
+          <div className="nav-index-wrapper">
+            <div className={`nav-index-list${isProject ? ' projects' : ''}`}>
+              {projects.map((project) => (
+                <NavProjectLink
+                  key={project._id}
+                  title={project.title}
+                  slug={project.slug}
+                  isCurrent={isProject && project.slug === currentSlug}
+                />
+              ))}
             </div>
           </div>
-          {description?.length ? (
-            <div className="nav-section project-description desktop">
-              <PortableText value={description} className="fine-print richtext" />
-            </div>
-          ) : null}
-          <div className="nav-section contact">
-            <div>CONTACT</div>
-            <a href={`mailto:${email}?subject=Inquiry`}>{email}</a>
-            <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
-              INSTAGRAM
-            </a>
+        </div>
+        {isProject && description?.length ? (
+          <div className="nav-section project-description desktop">
+            <PortableText value={description} className="fine-print richtext" />
           </div>
-          <div className="nav-section copyright project">
-            <div className="fine-print">©{copyrightYear} Linh Nguyen</div>
-            <div className="fine-print">
-              Website by{' '}
-              <a href={creditUrl} target="_blank" rel="noopener noreferrer">
-                {creditName}
-              </a>
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="nav-top-section">
-            <div className="nav-section bio">
-              <Link href="/" aria-current="page">
-                {name}
-              </Link>
-              <div>{tagline}</div>
-            </div>
-            <div className="nav-section index">
-              <div className="text-block">Work</div>
-              <div className="nav-index-wrapper">
-                <div className="nav-index-list">
-                  {projects.map((project) => (
-                    <NavProjectLink
-                      key={project._id}
-                      title={project.title}
-                      slug={project.slug}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="nav-section contact">
-              <div>CONTACT</div>
-              <a href={`mailto:${email}?subject=Inquiry`}>{email}</a>
-              <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
-                INSTAGRAM
-              </a>
-            </div>
-          </div>
-          <div className="nav-section copyright">
-            <div className="fine-print">©{copyrightYear} Linh Nguyen</div>
-            <div className="fine-print">
-              Website by{' '}
-              <a href={creditUrl} target="_blank" rel="noopener noreferrer">
-                {creditName}
-              </a>
-            </div>
-          </div>
-        </>
-      )}
+        ) : null}
+        <div className="nav-section contact">
+          <div>CONTACT</div>
+          <a href={`mailto:${email}?subject=Inquiry`}>{email}</a>
+          <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
+            INSTAGRAM
+          </a>
+        </div>
+      </div>
+      <div className={`nav-section copyright${isProject ? ' project' : ''}`}>
+        <div className="fine-print">©{copyrightYear} Linh Nguyen</div>
+        <div className="fine-print">
+          Website by{' '}
+          <a href={creditUrl} target="_blank" rel="noopener noreferrer">
+            {creditName}
+          </a>
+        </div>
+      </div>
     </div>
   )
 }
