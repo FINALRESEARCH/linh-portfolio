@@ -78,8 +78,8 @@ export default async function ProjectPage({params}: PageProps) {
 
   return (
     <>
-      <MobileProjectDescription description={typedProject.description} />
       <div className="outer-wrapper project">
+        <MobileProjectDescription description={typedProject.description} />
         <SidebarNav
           settings={settings}
           projects={projects}

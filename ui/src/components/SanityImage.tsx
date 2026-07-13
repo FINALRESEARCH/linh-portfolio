@@ -17,7 +17,7 @@ export function SanityImage({
   className,
   priority = false,
   loading,
-  sizes = '(max-width: 479px) 100vw, 65vw',
+  sizes = '(max-width: 767px) 100vw, 65vw',
 }: SanityImageProps) {
   const imageBuilder = urlFor(image).auto('format')
   const src = imageBuilder.url()

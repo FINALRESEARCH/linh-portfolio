@@ -405,125 +405,94 @@ a:hover {
   gap: 1rem;
 }
 
-@media screen and (max-width: 480px) {
-  .swiper-slide {
-    display: flex !important;
-  }
-}
-
-@media screen and (max-width: 479px) {
+@media screen and (max-width: 767px) {
   body {
     font-size: 0.8rem;
     line-height: 0.9rem;
   }
 
   .outer-wrapper {
-    flex-flow: column-reverse;
-    justify-content: flex-end;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: stretch;
     height: auto;
+    min-height: 100svh;
     padding: 8px;
+    gap: 0;
   }
 
   .outer-wrapper.project {
-    padding-top: 0;
+    padding-top: 8px;
   }
 
-  .nav-wrapper {
-    grid-column-gap: 6rem;
-    grid-row-gap: 6rem;
-    align-items: stretch;
-    min-width: 0;
-    padding-top: 4svh;
-    padding-bottom: 8px;
-    position: absolute;
-    top: 100svh;
-  }
-
+  .nav-wrapper,
   .nav-wrapper.project {
-    grid-column-gap: 6svh;
-    grid-row-gap: 6svh;
-    padding-top: 6svh;
+    display: contents;
   }
 
+  .nav-top-section,
   .nav-top-section.project {
     display: contents;
   }
 
-  .nav-section.index {
-    order: 2;
-  }
-
-  .nav-section.bio {
-    padding-top: 8px;
-    padding-left: 8px;
-    position: fixed;
-    inset: 0% 0% auto;
-  }
-
+  .nav-section.bio,
   .nav-section.bio.project {
-    order: 3;
-    padding-top: 0;
-    padding-left: 0;
+    order: 1;
     position: static;
-  }
-
-  .nav-section.copyright {
-    order: 5;
-    position: static;
-  }
-
-  .nav-section.project-description {
-    order: -1;
-    position: absolute;
-  }
-
-  .nav-section.project-description.desktop {
-    display: none;
-  }
-
-  .nav-section.project-description.mobile {
-    display: flex;
-    inset: auto 0% 0% 8px;
-  }
-
-  .nav-section.contact {
-    order: 4;
-  }
-
-  .fine-print {
-    font-size: 0.6rem;
-    line-height: 0.7rem;
+    padding: 0 0 0 8px;
+    width: 100%;
   }
 
   .images-wrapper {
+    order: 2;
+    position: relative;
     width: 100%;
     max-width: 100%;
-    height: 100svh;
-    position: absolute;
-    inset: 0%;
+    height: auto;
+    min-height: 55svh;
+    flex: 1 1 auto;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+    inset: auto;
   }
 
-  .swiper-slide-image {
-    vertical-align: middle;
+  .swiper,
+  .images-wrapper .swiper.swiper-projects {
+    height: auto;
+    min-height: 55svh;
   }
 
   .swiper-slide {
     justify-content: center;
-    display: flex;
-  }
-
-  .swiper-slide.project {
-    justify-content: flex-start;
     align-items: center;
+    display: flex !important;
+    height: auto;
+    min-height: 55svh;
+    width: 100%;
   }
 
   .swiper-wrapper {
     align-items: center;
+    height: auto;
+    min-height: 55svh;
   }
 
-  .swiper-wrapper.project {
+  .swiper-image-link {
+    height: auto;
+    max-height: none;
+    display: inline-flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    width: 100%;
+  }
+
+  .swiper-slide-image {
+    height: auto;
+    max-height: 55svh;
+    width: auto;
+    max-width: 100%;
+    vertical-align: middle;
   }
 
   .swiper-slide-title.fine-print {
@@ -532,46 +501,54 @@ a:hover {
     left: 8px;
   }
 
-  .swiper-image-link {
-    height: auto;
-    display: inline-flex;
+  .nav-section.project-description.mobile {
+    order: 3;
+    display: flex;
+    position: static;
+    padding: 1.5rem 0 0 8px;
+    inset: auto;
   }
 
-  .swiper-image-link.project {
-    justify-content: center;
-    align-items: flex-start;
-    max-height: 100%;
+  .nav-section.index {
+    order: 4;
+    padding-top: 1.5rem;
+  }
+
+  .nav-section.contact {
+    order: 5;
+    padding-top: 1.5rem;
+  }
+
+  .nav-section.copyright,
+  .nav-section.copyright.project {
+    order: 6;
+    position: static;
+    padding-top: 1.5rem;
+  }
+
+  .nav-section.project-description.desktop {
+    display: none;
+  }
+
+  .fine-print {
+    font-size: 0.6rem;
+    line-height: 0.7rem;
+  }
+
+  .swiper-navigation.is-projects {
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    bottom: 5px;
+    right: 0;
+  }
+
+  .swiper-button-next.swiper-arrow,
+  .swiper-button-prev.swiper-arrow {
+    position: static;
   }
 
   .balinhciaga {
     background-image: url('/images/BALINHCIAGA_WATERMARK_MOBILE.svg');
     height: 100vh;
-  }
-
-  .swiper-navigation.is-projects {
-    grid-column-gap: 0rem;
-    grid-row-gap: 0rem;
-    bottom: 5px;
-    right: 0;
-  }
-
-  .swiper-button-next.swiper-arrow {
-    position: static;
-  }
-
-  .swiper-button-prev.swiper-arrow {
-    position: static;
-  }
-
-  .nav-top-section {
-    grid-column-gap: 6rem;
-    grid-row-gap: 6rem;
-    align-items: stretch;
-  }
-
-  .nav-top-section.project {
-    grid-column-gap: 6svh;
-    grid-row-gap: 6svh;
-    padding-top: 6svh;
   }
 }

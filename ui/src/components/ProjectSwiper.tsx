@@ -147,7 +147,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
                   image={project.coverImage}
                   alt={project.title}
                   className="swiper-slide-image"
-                  sizes="(max-width: 479px) 100vw, 65vw"
+                  sizes="(max-width: 767px) 100vw, 65vw"
                 />
               </Link>
               <div className="swiper-slide-title fine-print">{project.title}</div>

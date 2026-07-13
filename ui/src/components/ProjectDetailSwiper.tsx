@@ -113,7 +113,7 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
                   image={image}
                   alt={`${title} — image ${index + 1}`}
                   className="swiper-slide-image"
-                  sizes="(max-width: 479px) 100vw, 65vw"
+                  sizes="(max-width: 767px) 100vw, 65vw"
                   priority={index === 0}
                   loading={index === 0 ? 'eager' : 'lazy'}
                 />
