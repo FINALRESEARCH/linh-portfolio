@@ -77,18 +77,16 @@ export default async function ProjectPage({params}: PageProps) {
   if (!typedProject) notFound()
 
   return (
-    <>
-      <div className="outer-wrapper project">
-        <MobileProjectDescription description={typedProject.description} />
-        <SidebarNav
-          settings={settings}
-          projects={projects}
-          variant="project"
-          currentSlug={slug}
-          description={typedProject.description}
-        />
-        <ProjectDetailSwiper images={typedProject.gallery ?? []} title={typedProject.title} />
-      </div>
-    </>
+    <div className="relative flex h-svh justify-between pt-3 pr-2.5 pb-2.5 pl-2.5 max-md:min-h-svh max-md:flex-col max-md:items-stretch max-md:justify-start max-md:gap-0 max-md:p-2 max-md:pt-2">
+      <MobileProjectDescription description={typedProject.description} />
+      <SidebarNav
+        settings={settings}
+        projects={projects}
+        variant="project"
+        currentSlug={slug}
+        description={typedProject.description}
+      />
+      <ProjectDetailSwiper images={typedProject.gallery ?? []} title={typedProject.title} />
+    </div>
   )
 }

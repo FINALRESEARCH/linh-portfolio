@@ -1,6 +1,7 @@
 'use client'
 
 import {useEffect, useRef, useState} from 'react'
+import {cn} from '@/lib/cn'
 
 type CustomCursorProps = {
   currentIndex: number
@@ -58,7 +59,10 @@ export function CustomCursor({currentIndex, totalImages}: CustomCursorProps) {
   return (
     <div
       ref={cursorRef}
-      className={`custom-cursor${visible ? ' is-visible' : ''}`}
+      className={cn(
+        'custom-cursor pointer-events-none fixed z-[9999] whitespace-nowrap font-sans text-2xl leading-8 font-medium tracking-[-0.015rem] text-white mix-blend-difference normal-case opacity-0 max-lg:hidden',
+        visible && 'opacity-100',
+      )}
       aria-hidden="true"
     >
       {formatSlideLabel(currentIndex, totalImages)}

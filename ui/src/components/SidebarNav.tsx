@@ -2,8 +2,12 @@ import Link from 'next/link'
 import type {PortableTextBlock} from '@portabletext/types'
 import {NavProjectLink} from '@/components/NavProjectLink'
 import {PortableText} from '@/components/PortableText'
+import {cn} from '@/lib/cn'
 
 import type {ProjectListItem, SiteSettings} from '@/sanity/types'
+
+const finePrint =
+  'text-[0.7rem] leading-[0.9rem] tracking-[-0.005rem] max-md:text-[0.6rem] max-md:leading-[0.7rem]'
 
 type SidebarNavProps = {
   settings: SiteSettings | null
@@ -30,35 +34,44 @@ export function SidebarNav({
   const creditUrl = settings?.creditUrl || 'https://left.systems'
 
   return (
-    <div className={`nav-wrapper${isProject ? ' project' : ''}`}>
-      <div className={`nav-top-section${isProject ? ' project' : ''}`}>
-        <div className={`nav-section bio${isProject ? ' project' : ''}`}>
+    <div className="flex min-w-[25dvw] flex-col items-start justify-between gap-32 pr-[5dvw] max-md:contents">
+      <div className="flex flex-col items-start justify-start gap-32 max-md:contents">
+        <div
+          className={cn(
+            'flex flex-col items-start',
+            'max-md:order-1 max-md:static max-md:w-full max-md:p-0',
+          )}
+        >
           <Link href="/" aria-current={isProject ? undefined : 'page'}>
             {name}
           </Link>
           <div>{tagline}</div>
         </div>
-        <div className="nav-section index">
-          <div className="text-block">Work</div>
-          <div className="nav-index-wrapper">
-            <div className={`nav-index-list${isProject ? ' projects' : ''}`}>
-              {projects.map((project) => (
-                <NavProjectLink
-                  key={project._id}
-                  title={project.title}
-                  slug={project.slug}
-                  isCurrent={isProject && project.slug === currentSlug}
-                />
-              ))}
-            </div>
+        <div
+          className={cn(
+            'flex flex-col items-start gap-4',
+            'max-md:order-4 max-md:pt-12',
+          )}
+        >
+          <div>Work</div>
+          <div className="flex flex-col">
+            {projects.map((project) => (
+              <NavProjectLink
+                key={project._id}
+                title={project.title}
+                slug={project.slug}
+                variant={variant}
+                isCurrent={isProject && project.slug === currentSlug}
+              />
+            ))}
           </div>
         </div>
         {isProject && description?.length ? (
-          <div className="nav-section project-description desktop">
-            <PortableText value={description} className="fine-print richtext" />
+          <div className="max-w-[25dvw] max-md:hidden">
+            <PortableText value={description} className={cn(finePrint, 'richtext')} />
           </div>
         ) : null}
-        <div className="nav-section contact">
+        <div className={cn('flex flex-col items-start', 'max-md:order-5 max-md:pt-12')}>
           <div>CONTACT</div>
           <a href={`mailto:${email}?subject=Inquiry`}>{email}</a>
           <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
@@ -66,9 +79,14 @@ export function SidebarNav({
           </a>
         </div>
       </div>
-      <div className={`nav-section copyright${isProject ? ' project' : ''}`}>
-        <div className="fine-print">©{copyrightYear} Linh Nguyen</div>
-        <div className="fine-print">
+      <div
+        className={cn(
+          'absolute bottom-2.5 left-2.5',
+          'max-md:order-6 max-md:static max-md:pt-12',
+        )}
+      >
+        <div className={finePrint}>©{copyrightYear} Linh Nguyen</div>
+        <div className={finePrint}>
           Website by{' '}
           <a href={creditUrl} target="_blank" rel="noopener noreferrer">
             {creditName}
@@ -87,8 +105,8 @@ export function MobileProjectDescription({
   if (!description?.length) return null
 
   return (
-    <div className="nav-section project-description mobile">
-      <PortableText value={description} className="fine-print richtext" />
+    <div className="hidden max-md:order-3 max-md:flex max-md:static max-md:pt-12">
+      <PortableText value={description} className={cn(finePrint, 'richtext')} />
     </div>
   )
 }
