@@ -444,7 +444,7 @@ a:hover {
   .nav-section.bio.project {
     order: 1;
     position: static;
-    padding: 0 0 0 8px;
+    padding: 0;
     width: 100%;
   }
 
@@ -515,7 +515,7 @@ a:hover {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0.5rem 8px 0;
+    padding: 0.5rem 0 0;
     gap: 1rem;
   }
 
@@ -537,7 +537,7 @@ a:hover {
     order: 3;
     display: flex;
     position: static;
-    padding: var(--nav-section-gap) 0 0 8px;
+    padding: var(--nav-section-gap) 0 0;
     inset: auto;
   }
 
