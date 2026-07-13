@@ -423,6 +423,7 @@ a:hover {
     min-height: 100svh;
     padding: 8px;
     gap: 0;
+    --nav-section-gap: 3rem;
   }
 
   .outer-wrapper.project {
@@ -536,25 +537,25 @@ a:hover {
     order: 3;
     display: flex;
     position: static;
-    padding: 1.5rem 0 0 8px;
+    padding: var(--nav-section-gap) 0 0 8px;
     inset: auto;
   }
 
   .nav-section.index {
     order: 4;
-    padding-top: 1.5rem;
+    padding-top: var(--nav-section-gap);
   }
 
   .nav-section.contact {
     order: 5;
-    padding-top: 1.5rem;
+    padding-top: var(--nav-section-gap);
   }
 
   .nav-section.copyright,
   .nav-section.copyright.project {
     order: 6;
     position: static;
-    padding-top: 1.5rem;
+    padding-top: var(--nav-section-gap);
   }
 
   .nav-section.project-description.desktop {
