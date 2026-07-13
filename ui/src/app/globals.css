@@ -449,10 +449,10 @@ a:hover {
     width: 100%;
     max-width: 100%;
     height: auto;
-    min-height: 55svh;
-    flex: 1 1 auto;
-    justify-content: center;
-    align-items: center;
+    min-height: unset;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    align-items: stretch;
     margin-top: 1.5rem;
     inset: auto;
   }
@@ -460,22 +460,23 @@ a:hover {
   .swiper,
   .images-wrapper .swiper.swiper-projects {
     height: auto;
-    min-height: 55svh;
+    min-height: unset;
   }
 
   .swiper-slide {
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: stretch;
     display: flex !important;
+    flex-direction: column;
     height: auto;
-    min-height: 55svh;
+    min-height: unset;
     width: 100%;
   }
 
   .swiper-wrapper {
-    align-items: center;
+    align-items: stretch;
     height: auto;
-    min-height: 55svh;
+    min-height: unset;
   }
 
   .swiper-image-link {
@@ -485,20 +486,38 @@ a:hover {
     justify-content: center;
     align-items: center;
     width: 100%;
+    flex: 0 0 auto;
   }
 
   .swiper-slide-image {
     height: auto;
-    max-height: 55svh;
+    max-height: 70svh;
     width: auto;
     max-width: 100%;
     vertical-align: middle;
   }
 
   .swiper-slide-title.fine-print {
-    width: 85%;
-    bottom: 8px;
-    left: 8px;
+    position: relative;
+    inset: auto;
+    width: auto;
+    max-width: 70%;
+    min-height: 1.5rem;
+    margin: 0.5rem 0 0;
+    padding: 0 0 0 8px;
+    display: flex;
+    align-items: center;
+  }
+
+  .swiper-navigation.is-projects {
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    align-items: center;
+    height: 1.5rem;
+    padding-right: 8px;
   }
 
   .nav-section.project-description.mobile {
@@ -533,13 +552,6 @@ a:hover {
   .fine-print {
     font-size: 0.6rem;
     line-height: 0.7rem;
-  }
-
-  .swiper-navigation.is-projects {
-    grid-column-gap: 0;
-    grid-row-gap: 0;
-    bottom: 5px;
-    right: 0;
   }
 
   .swiper-button-next.swiper-arrow,
