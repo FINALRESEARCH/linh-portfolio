@@ -125,7 +125,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
 
   if (!projects.length) {
     return (
-      <div className="images-wrapper flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end max-md:order-2 max-md:mt-6 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start">
+      <div className="images-wrapper flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end max-md:order-2 max-md:mt-[clamp(2rem,6svh,4rem)] max-md:mb-[clamp(2rem,6svh,4rem)] max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start">
         <p className={finePrint}>No projects yet.</p>
       </div>
     )
@@ -136,7 +136,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
       <div
         className={cn(
           'images-wrapper flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end',
-          'max-md:order-2 max-md:relative max-md:mt-6 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
+          'max-md:order-2 max-md:relative max-md:mt-[clamp(2rem,6svh,4rem)] max-md:mb-[clamp(2rem,6svh,4rem)] max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
         <Swiper
@@ -187,7 +187,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
             onClick={() => handleNavClick('next')}
           />
         </div>
-        <div className="swiper-mobile-footer hidden w-full items-center justify-between gap-4 px-2 pt-2 max-md:flex">
+        <div className="swiper-mobile-footer hidden w-full items-center justify-between gap-4 px-2 pt-[clamp(2rem,6svh,4rem)] max-md:flex">
           <div className={cn(finePrint, 'swiper-mobile-title min-w-0 flex-1')}>
             {projects[activeIndex]?.title}
           </div>

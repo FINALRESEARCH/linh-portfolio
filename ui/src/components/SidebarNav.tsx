@@ -52,7 +52,7 @@ export function SidebarNav({
         <div
           className={cn(
             'flex flex-col items-start gap-4',
-            isProject ? 'max-md:order-3 max-md:px-2 max-md:pt-12' : 'max-md:order-4 max-md:px-2 max-md:pt-12',
+            isProject ? 'max-md:order-3 max-md:px-2 max-md:pt-12' : 'max-md:order-4 max-md:px-2 max-md:pt-0',
           )}
         >
           <div>Work</div>
