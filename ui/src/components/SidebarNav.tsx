@@ -41,7 +41,7 @@ export function SidebarNav({
             'flex flex-col items-start',
             isProject
               ? 'max-md:order-4 max-md:static max-md:w-full max-md:px-2 max-md:pt-12'
-              : 'max-md:order-1 max-md:static max-md:w-full max-md:p-0',
+              : 'max-md:order-1 max-md:static max-md:w-full max-md:px-2 max-md:pt-2',
           )}
         >
           <Link href="/" aria-current={isProject ? undefined : 'page'}>
@@ -52,7 +52,7 @@ export function SidebarNav({
         <div
           className={cn(
             'flex flex-col items-start gap-4',
-            isProject ? 'max-md:order-3 max-md:px-2 max-md:pt-12' : 'max-md:order-4 max-md:pt-12',
+            isProject ? 'max-md:order-3 max-md:px-2 max-md:pt-12' : 'max-md:order-4 max-md:px-2 max-md:pt-12',
           )}
         >
           <div>Work</div>
@@ -76,7 +76,7 @@ export function SidebarNav({
         <div
           className={cn(
             'flex flex-col items-start',
-            isProject ? 'max-md:order-5 max-md:px-2 max-md:pt-12' : 'max-md:order-5 max-md:pt-12',
+            isProject ? 'max-md:order-5 max-md:px-2 max-md:pt-12' : 'max-md:order-5 max-md:px-2 max-md:pt-12',
           )}
         >
           <div>CONTACT</div>
@@ -91,7 +91,7 @@ export function SidebarNav({
           'absolute bottom-2.5 left-2.5',
           isProject
             ? 'max-md:order-6 max-md:static max-md:px-2 max-md:pt-12 max-md:pb-2'
-            : 'max-md:order-6 max-md:static max-md:pt-12',
+            : 'max-md:order-6 max-md:static max-md:px-2 max-md:pt-12 max-md:pb-2',
         )}
       >
         <div className={finePrint}>©{copyrightYear} Linh Nguyen</div>
