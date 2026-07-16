@@ -109,9 +109,9 @@
   }
 
   /*
-   * Fade slides are position:absolute by default, so the wrapper can collapse
-   * and percentage-based images shrink on each slide change (especially in prod).
-   * Stack slides in a grid cell so height stays stable.
+   * Fade slides are position:absolute by default, which collapses height and
+   * shrinks images on slide change. Stack them in one grid cell at full height
+   * so the container stays stable while images still fill the column.
    */
   .images-wrapper.is-home-carousel .swiper,
   .images-wrapper.is-home-carousel .swiper-wrapper {
@@ -120,31 +120,51 @@
 
   .images-wrapper.is-home-carousel .swiper-wrapper {
     display: grid;
-    align-items: center;
-    justify-items: end;
+    align-items: stretch;
+    justify-items: center;
   }
 
   .images-wrapper.is-home-carousel .swiper-slide {
     grid-area: 1 / 1;
     position: relative !important;
-    width: 100% !important;
-    height: auto !important;
-    max-height: 100%;
-    align-self: center;
-    justify-self: end;
+    inset: auto !important;
+    width: auto !important;
+    max-width: 100%;
+    height: 100% !important;
+    max-height: none;
+    align-self: stretch;
+    justify-self: center;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
   .images-wrapper.is-home-carousel .swiper-image-link {
-    height: auto;
-    max-height: min(94%, 100%);
+    height: 100%;
+    max-height: 94%;
     max-width: 100%;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .images-wrapper.is-home-carousel .swiper-slide-image {
     width: auto;
-    height: auto;
+    height: 100%;
     max-width: 100%;
-    max-height: min(94vh, 100%);
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .images-wrapper.is-home-carousel .swiper-slide-title {
+    position: absolute;
+    inset: auto auto 0 0;
+    margin: 0;
+    display: inline-flex;
+    white-space: nowrap;
   }
 
   .swiper-arrow {
@@ -219,6 +239,7 @@
     .images-wrapper.is-home-carousel .swiper-slide {
       @apply !flex w-full items-center justify-center;
       height: auto !important;
+      max-width: 100%;
       justify-self: center;
     }
 

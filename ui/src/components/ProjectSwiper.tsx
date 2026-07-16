@@ -169,7 +169,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
                 <div
                   className={cn(
                     finePrint,
-                    'absolute inset-x-0 bottom-0 mb-0 inline-flex font-sans max-md:hidden',
+                    'swiper-slide-title absolute inset-x-0 bottom-0 mb-0 inline-flex font-sans max-md:hidden',
                   )}
                 >
                   {project.title}
@@ -178,16 +178,16 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
             ))}
           </Swiper>
         </div>
-        <div className="swiper-navigation is-projects is-desktop absolute right-2.5 bottom-2.5 z-[1] flex items-center gap-2 max-md:hidden">
+        <div className="swiper-navigation is-projects is-desktop absolute right-2.5 bottom-2.5 z-[1] hidden items-center gap-2 md:flex">
           <button
             type="button"
-            className="swiper-button-prev swiper-arrow fixed right-[30px] bottom-2.5 h-[22px] w-7 bg-[length:16px_16px] max-md:static"
+            className="swiper-button-prev swiper-arrow fixed right-[30px] bottom-2.5 h-[22px] w-7 bg-[length:16px_16px]"
             aria-label="Previous project"
             onClick={() => handleNavClick('prev')}
           />
           <button
             type="button"
-            className="swiper-button-next swiper-arrow fixed right-0.5 bottom-2.5 h-[22px] w-7 bg-[length:16px_16px] max-md:static"
+            className="swiper-button-next swiper-arrow fixed right-0.5 bottom-2.5 h-[22px] w-7 bg-[length:16px_16px]"
             aria-label="Next project"
             onClick={() => handleNavClick('next')}
           />
