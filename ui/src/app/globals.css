@@ -164,6 +164,18 @@
       @apply h-auto max-h-[70svh] w-full max-w-full align-middle;
     }
 
+    .images-wrapper.is-home-carousel .swiper-slide {
+      @apply !flex items-center justify-center;
+    }
+
+    .images-wrapper.is-home-carousel .swiper-image-link {
+      @apply w-auto max-w-full items-center justify-center;
+    }
+
+    .images-wrapper.is-home-carousel .swiper-slide-image {
+      @apply mx-auto h-auto w-auto max-h-[70svh] max-w-full object-contain object-center;
+    }
+
     .images-wrapper.is-project-gallery .swiper-slide-image {
       @apply h-auto max-h-none w-full;
     }

@@ -125,7 +125,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
 
   if (!projects.length) {
     return (
-      <div className="images-wrapper flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end max-md:order-2 max-md:mt-[clamp(2rem,6svh,4rem)] max-md:mb-[clamp(2rem,6svh,4rem)] max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start">
+      <div className="images-wrapper flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end max-md:order-2 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start">
         <p className={finePrint}>No projects yet.</p>
       </div>
     )
@@ -135,44 +135,46 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
     <>
       <div
         className={cn(
-          'images-wrapper flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end',
-          'max-md:order-2 max-md:relative max-md:mt-[clamp(2rem,6svh,4rem)] max-md:mb-[clamp(2rem,6svh,4rem)] max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
+          'images-wrapper is-home-carousel flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end',
+          'max-md:order-2 max-md:relative max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
-        <Swiper
-          className="swiper swiper-projects"
-          modules={[EffectFade, Keyboard]}
-          centeredSlides
-          slidesPerView={1}
-          effect="fade"
-          fadeEffect={{crossFade: true}}
-          speed={0}
-          loop={false}
-          keyboard={{enabled: true}}
-          allowTouchMove={false}
-          onSwiper={setSwiper}
-        >
-          {projects.map((project) => (
-            <SwiperSlide key={project._id} className="swiper-slide">
-              <Link href={`/projects/${project.slug}`} className="swiper-image-link">
-                <SanityImage
-                  image={project.coverImage}
-                  alt={project.title}
-                  className="swiper-slide-image"
-                  sizes="(max-width: 767px) 100vw, 65vw"
-                />
-              </Link>
-              <div
-                className={cn(
-                  finePrint,
-                  'absolute inset-x-0 bottom-0 mb-0 inline-flex font-sans max-md:hidden',
-                )}
-              >
-                {project.title}
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="w-full max-md:flex max-md:items-center max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
+          <Swiper
+            className="swiper swiper-projects max-md:w-full"
+            modules={[EffectFade, Keyboard]}
+            centeredSlides
+            slidesPerView={1}
+            effect="fade"
+            fadeEffect={{crossFade: true}}
+            speed={0}
+            loop={false}
+            keyboard={{enabled: true}}
+            allowTouchMove={false}
+            onSwiper={setSwiper}
+          >
+            {projects.map((project) => (
+              <SwiperSlide key={project._id} className="swiper-slide">
+                <Link href={`/projects/${project.slug}`} className="swiper-image-link">
+                  <SanityImage
+                    image={project.coverImage}
+                    alt={project.title}
+                    className="swiper-slide-image"
+                    sizes="(max-width: 767px) 100vw, 65vw"
+                  />
+                </Link>
+                <div
+                  className={cn(
+                    finePrint,
+                    'absolute inset-x-0 bottom-0 mb-0 inline-flex font-sans max-md:hidden',
+                  )}
+                >
+                  {project.title}
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
         <div className="swiper-navigation is-projects is-desktop absolute right-2.5 bottom-2.5 z-[1] flex items-center gap-2 max-md:hidden">
           <button
             type="button"
@@ -187,7 +189,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
             onClick={() => handleNavClick('next')}
           />
         </div>
-        <div className="swiper-mobile-footer hidden w-full items-center justify-between gap-4 px-2 pt-[clamp(2rem,6svh,4rem)] max-md:flex">
+        <div className="swiper-mobile-footer hidden w-full items-center justify-between gap-4 px-2 max-md:flex">
           <div className={cn(finePrint, 'swiper-mobile-title min-w-0 flex-1')}>
             {projects[activeIndex]?.title}
           </div>
