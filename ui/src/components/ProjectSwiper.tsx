@@ -135,13 +135,13 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
     <>
       <div
         className={cn(
-          'images-wrapper is-home-carousel flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end',
+          'images-wrapper is-home-carousel flex h-full w-[65dvw] max-w-[65dvw] flex-col items-end justify-end',
           'max-md:order-2 max-md:relative max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
         <div className="h-full w-full min-h-0 max-md:flex max-md:h-auto max-md:items-center max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
           <Swiper
-            className="swiper swiper-projects h-full max-md:w-full"
+            className="swiper swiper-projects !h-full w-full max-md:!h-auto"
             modules={[EffectFade, Keyboard]}
             centeredSlides
             slidesPerView={1}
@@ -156,14 +156,15 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
             observer={false}
             observeParents={false}
           >
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <SwiperSlide key={project._id} className="swiper-slide">
                 <Link href={`/projects/${project.slug}`} className="swiper-image-link">
                   <SanityImage
                     image={project.coverImage}
                     alt={project.title}
-                    className="swiper-slide-image"
+                    className="swiper-slide-image max-md:mx-auto max-md:h-auto max-md:max-h-[70svh] max-md:w-auto max-md:max-w-full"
                     sizes="(max-width: 767px) 100vw, 65vw"
+                    priority={index === 0}
                   />
                 </Link>
                 <div
