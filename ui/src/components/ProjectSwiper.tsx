@@ -139,9 +139,9 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
           'max-md:order-2 max-md:relative max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
-        <div className="w-full max-md:flex max-md:items-center max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
+        <div className="h-full w-full min-h-0 max-md:flex max-md:h-auto max-md:items-center max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
           <Swiper
-            className="swiper swiper-projects max-md:w-full"
+            className="swiper swiper-projects h-full max-md:w-full"
             modules={[EffectFade, Keyboard]}
             centeredSlides
             slidesPerView={1}
@@ -149,9 +149,12 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
             fadeEffect={{crossFade: true}}
             speed={0}
             loop={false}
+            autoHeight={false}
             keyboard={{enabled: true}}
             allowTouchMove={false}
             onSwiper={setSwiper}
+            observer={false}
+            observeParents={false}
           >
             {projects.map((project) => (
               <SwiperSlide key={project._id} className="swiper-slide">

@@ -65,7 +65,10 @@
   .swiper-slide-image {
     pointer-events: none;
     object-fit: contain;
-    height: 100%;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .swiper-slide {
@@ -103,6 +106,45 @@
   .swiper-image-link.loaded > img {
     visibility: visible;
     opacity: 1;
+  }
+
+  /*
+   * Fade slides are position:absolute by default, so the wrapper can collapse
+   * and percentage-based images shrink on each slide change (especially in prod).
+   * Stack slides in a grid cell so height stays stable.
+   */
+  .images-wrapper.is-home-carousel .swiper,
+  .images-wrapper.is-home-carousel .swiper-wrapper {
+    height: 100%;
+  }
+
+  .images-wrapper.is-home-carousel .swiper-wrapper {
+    display: grid;
+    align-items: center;
+    justify-items: end;
+  }
+
+  .images-wrapper.is-home-carousel .swiper-slide {
+    grid-area: 1 / 1;
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 100%;
+    align-self: center;
+    justify-self: end;
+  }
+
+  .images-wrapper.is-home-carousel .swiper-image-link {
+    height: auto;
+    max-height: min(94%, 100%);
+    max-width: 100%;
+  }
+
+  .images-wrapper.is-home-carousel .swiper-slide-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: min(94vh, 100%);
   }
 
   .swiper-arrow {
@@ -164,16 +206,31 @@
       @apply h-auto max-h-[70svh] w-full max-w-full align-middle;
     }
 
+    .images-wrapper.is-home-carousel .swiper,
+    .images-wrapper.is-home-carousel .swiper-wrapper {
+      height: auto;
+      width: 100%;
+    }
+
+    .images-wrapper.is-home-carousel .swiper-wrapper {
+      justify-items: center;
+    }
+
     .images-wrapper.is-home-carousel .swiper-slide {
-      @apply !flex items-center justify-center;
+      @apply !flex w-full items-center justify-center;
+      height: auto !important;
+      justify-self: center;
     }
 
     .images-wrapper.is-home-carousel .swiper-image-link {
       @apply w-auto max-w-full items-center justify-center;
+      height: auto;
+      max-height: none;
     }
 
     .images-wrapper.is-home-carousel .swiper-slide-image {
       @apply mx-auto h-auto w-auto max-h-[70svh] max-w-full object-contain object-center;
+      max-height: 70svh;
     }
 
     .images-wrapper.is-project-gallery .swiper-slide-image {

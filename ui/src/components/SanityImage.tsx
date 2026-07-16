@@ -29,7 +29,7 @@ export function SanityImage({
     <Image
       src={src}
       alt={alt}
-      className={cn('h-full w-auto object-contain', className)}
+      className={cn('h-auto w-auto max-h-full max-w-full object-contain', className)}
       width={2000}
       height={2000}
       sizes={sizes}
