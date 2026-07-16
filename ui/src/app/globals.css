@@ -163,5 +163,9 @@
     .swiper-slide-image {
       @apply h-auto max-h-[70svh] w-auto max-w-full align-middle;
     }
+
+    .images-wrapper.is-project-gallery .swiper-slide-image {
+      @apply h-auto max-h-none w-full;
+    }
   }
 }

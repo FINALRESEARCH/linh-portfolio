@@ -98,7 +98,7 @@ export function ProjectDetailSwiper({
       <div
         className={cn(
           'images-wrapper is-project-gallery flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end',
-          'max-md:order-2 max-md:relative max-md:mt-6 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
+          'max-md:order-1 max-md:relative max-md:mt-0 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
         <p className={finePrint}>No gallery images.</p>
@@ -112,7 +112,7 @@ export function ProjectDetailSwiper({
       <div
         className={cn(
           'images-wrapper is-project-gallery flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end',
-          'max-md:order-2 max-md:relative max-md:mt-6 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
+          'max-md:order-1 max-md:relative max-md:mt-0 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
         <Swiper
@@ -129,7 +129,7 @@ export function ProjectDetailSwiper({
         >
           {images.map((image, index) => (
             <SwiperSlide key={`${title}-${index}`} className="swiper-slide">
-              <div className="swiper-image-link relative cursor-none">
+              <div className="swiper-image-link relative cursor-none max-md:cursor-auto">
                 <SanityImage
                   image={image}
                   alt={`${title} — image ${index + 1}`}
@@ -141,13 +141,13 @@ export function ProjectDetailSwiper({
                 <div className="swiper-project-image-nav absolute inset-0 z-[1] flex justify-between">
                   <button
                     type="button"
-                    className="swiper-project-image-nav-prev h-full w-1/2 cursor-none border-0 bg-transparent p-0"
+                    className="swiper-project-image-nav-prev h-full w-1/2 cursor-none border-0 bg-transparent p-0 max-md:cursor-auto"
                     aria-label="Previous image"
                     onClick={() => handleNavClick('prev')}
                   />
                   <button
                     type="button"
-                    className="swiper-project-image-nav-next h-full w-1/2 cursor-none border-0 bg-transparent p-0"
+                    className="swiper-project-image-nav-next h-full w-1/2 cursor-none border-0 bg-transparent p-0 max-md:cursor-auto"
                     aria-label="Next image"
                     onClick={() => handleNavClick('next')}
                   />
@@ -170,7 +170,7 @@ export function ProjectDetailSwiper({
             onClick={() => handleNavClick('next')}
           />
         </div>
-        <div className="hidden w-full items-end justify-between gap-4 pt-2 max-md:flex">
+        <div className="hidden w-full items-end justify-between gap-4 px-2 pt-2 max-md:flex">
           <div className="min-w-0 flex-1">
             {description?.length ? (
               <PortableText value={description} className={cn(finePrint, 'richtext')} />

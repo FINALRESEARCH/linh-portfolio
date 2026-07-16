@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type {SanityImageSource} from '@sanity/image-url'
 import {urlFor} from '@/sanity/lib/image'
+import {cn} from '@/lib/cn'
 
 type SanityImageProps = {
   image: SanityImageSource
@@ -28,13 +29,12 @@ export function SanityImage({
     <Image
       src={src}
       alt={alt}
-      className={className}
+      className={cn('h-full w-auto object-contain', className)}
       width={2000}
       height={2000}
       sizes={sizes}
       priority={priority}
       loading={loading}
-      style={{width: 'auto', height: '100%', objectFit: 'contain'}}
     />
   )
 }

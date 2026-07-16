@@ -77,7 +77,7 @@ export default async function ProjectPage({params}: PageProps) {
   if (!typedProject) notFound()
 
   return (
-    <div className="relative flex h-svh justify-between pt-3 pr-2.5 pb-2.5 pl-2.5 max-md:min-h-svh max-md:flex-col max-md:items-stretch max-md:justify-start max-md:gap-0 max-md:p-2 max-md:pt-2">
+    <div className="relative flex h-svh justify-between pt-3 pr-2.5 pb-2.5 pl-2.5 max-md:min-h-svh max-md:flex-col max-md:items-stretch max-md:justify-start max-md:gap-0 max-md:p-0">
       <SidebarNav
         settings={settings}
         projects={projects}
