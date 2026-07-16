@@ -97,16 +97,3 @@ export function SidebarNav({
   )
 }
 
-export function MobileProjectDescription({
-  description,
-}: {
-  description?: PortableTextBlock[]
-}) {
-  if (!description?.length) return null
-
-  return (
-    <div className="hidden max-md:order-3 max-md:flex max-md:static max-md:pt-12">
-      <PortableText value={description} className={cn(finePrint, 'richtext')} />
-    </div>
-  )
-}

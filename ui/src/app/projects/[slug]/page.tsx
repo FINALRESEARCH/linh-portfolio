@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
-import {MobileProjectDescription, SidebarNav} from '@/components/SidebarNav'
+import {SidebarNav} from '@/components/SidebarNav'
 import {ProjectDetailSwiper} from '@/components/ProjectDetailSwiper'
 import {getProjects, getSiteSettings, fetchSanityData} from '@/lib/data'
 import {getMetadataBase, resolveLinkPreview} from '@/lib/seo'
@@ -78,7 +78,6 @@ export default async function ProjectPage({params}: PageProps) {
 
   return (
     <div className="relative flex h-svh justify-between pt-3 pr-2.5 pb-2.5 pl-2.5 max-md:min-h-svh max-md:flex-col max-md:items-stretch max-md:justify-start max-md:gap-0 max-md:p-2 max-md:pt-2">
-      <MobileProjectDescription description={typedProject.description} />
       <SidebarNav
         settings={settings}
         projects={projects}
@@ -86,7 +85,11 @@ export default async function ProjectPage({params}: PageProps) {
         currentSlug={slug}
         description={typedProject.description}
       />
-      <ProjectDetailSwiper images={typedProject.gallery ?? []} title={typedProject.title} />
+      <ProjectDetailSwiper
+        images={typedProject.gallery ?? []}
+        title={typedProject.title}
+        description={typedProject.description}
+      />
     </div>
   )
 }

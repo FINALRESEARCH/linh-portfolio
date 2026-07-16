@@ -1,12 +1,14 @@
 'use client'
 
 import {useCallback, useEffect, useState} from 'react'
+import type {PortableTextBlock} from '@portabletext/types'
 import type {SanityImageSource} from '@sanity/image-url'
 import {EffectFade} from 'swiper/modules'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import type {Swiper as SwiperType} from 'swiper'
 import {SanityImage} from '@/components/SanityImage'
 import {CustomCursor} from '@/components/CustomCursor'
+import {PortableText} from '@/components/PortableText'
 import {cn} from '@/lib/cn'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
@@ -17,9 +19,14 @@ const finePrint =
 type ProjectDetailSwiperProps = {
   images: SanityImageSource[]
   title: string
+  description?: PortableTextBlock[]
 }
 
-export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
+export function ProjectDetailSwiper({
+  images,
+  title,
+  description,
+}: ProjectDetailSwiperProps) {
   const [swiper, setSwiper] = useState<SwiperType | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -149,19 +156,40 @@ export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="swiper-navigation is-projects absolute right-2.5 bottom-2.5 z-[1] flex items-center gap-2">
+        <div className="swiper-navigation is-projects absolute right-2.5 bottom-2.5 z-[1] hidden items-center gap-2 md:flex">
           <button
             type="button"
-            className="swiper-button-prev swiper-arrow fixed right-[30px] bottom-2.5 h-[22px] w-7 bg-[length:16px_16px] max-md:static"
+            className="swiper-button-prev swiper-arrow fixed right-[30px] bottom-2.5 h-[22px] w-7 bg-[length:16px_16px]"
             aria-label="Previous image"
             onClick={() => handleNavClick('prev')}
           />
           <button
             type="button"
-            className="swiper-button-next swiper-arrow fixed right-0.5 bottom-2.5 h-[22px] w-7 bg-[length:16px_16px] max-md:static"
+            className="swiper-button-next swiper-arrow fixed right-0.5 bottom-2.5 h-[22px] w-7 bg-[length:16px_16px]"
             aria-label="Next image"
             onClick={() => handleNavClick('next')}
           />
+        </div>
+        <div className="hidden w-full items-end justify-between gap-4 pt-2 max-md:flex">
+          <div className="min-w-0 flex-1">
+            {description?.length ? (
+              <PortableText value={description} className={cn(finePrint, 'richtext')} />
+            ) : null}
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              className="swiper-button-prev swiper-arrow h-[22px] w-7 bg-[length:16px_16px]"
+              aria-label="Previous image"
+              onClick={() => handleNavClick('prev')}
+            />
+            <button
+              type="button"
+              className="swiper-button-next swiper-arrow h-[22px] w-7 bg-[length:16px_16px]"
+              aria-label="Next image"
+              onClick={() => handleNavClick('next')}
+            />
+          </div>
         </div>
       </div>
     </>
