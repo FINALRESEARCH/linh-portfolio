@@ -120,7 +120,7 @@ export function ProjectDetailSwiper({
           onClick={() => goTo('next')}
         />
 
-        <div className="flex w-full items-end justify-between gap-4 px-2 pt-2 md:hidden">
+        <div className="flex w-full items-end justify-between gap-4 px-2 pt-12 md:hidden">
           <div className="min-w-0 flex-1">
             {description?.length ? (
               <PortableText value={description} className={cn(finePrint, 'richtext')} />

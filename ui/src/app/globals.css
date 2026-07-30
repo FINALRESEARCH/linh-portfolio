@@ -293,10 +293,17 @@
       object-position: center;
     }
 
-    .images-wrapper.is-project-gallery .project-gallery-image {
-      max-height: 70svh;
+    .images-wrapper.is-project-gallery .project-gallery-frame {
       width: 100%;
-      height: auto;
+      justify-content: center;
+    }
+
+    .images-wrapper.is-project-gallery .project-gallery-image {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      max-height: none !important;
+      object-fit: contain;
       object-position: center;
     }
   }
