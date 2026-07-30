@@ -71,7 +71,7 @@ export function ProjectDetailSwiper({
       <CustomCursor currentIndex={activeIndex} totalImages={total} />
       <div
         className={cn(
-          'images-wrapper is-project-gallery relative flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end',
+          'images-wrapper is-project-gallery relative flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end max-lg:cursor-auto lg:cursor-none',
           'max-md:order-1 max-md:mt-0 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >

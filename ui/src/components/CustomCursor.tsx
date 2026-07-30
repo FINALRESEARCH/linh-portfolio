@@ -1,6 +1,6 @@
 'use client'
 
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useRef} from 'react'
 import {cn} from '@/lib/cn'
 
 type CustomCursorProps = {
@@ -18,28 +18,39 @@ function formatSlideLabel(index: number, total: number) {
 
 export function CustomCursor({currentIndex, totalImages}: CustomCursorProps) {
   const cursorRef = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const cursor = cursorRef.current
+    if (cursor) cursor.textContent = formatSlideLabel(currentIndex, totalImages)
+  }, [currentIndex, totalImages])
 
   useEffect(() => {
     if (!isDesktop()) return
 
     const target = document.querySelector('.images-wrapper.is-project-gallery')
-    if (!target) return
+    const cursor = cursorRef.current
+    if (!target || !cursor) return
 
-    const onEnter = () => setVisible(true)
-    const onLeave = () => setVisible(false)
+    cursor.style.willChange = 'transform'
+    cursor.style.opacity = '0'
+    cursor.style.transform = 'translate3d(-9999px, -9999px, 0)'
 
+    const onEnter = () => {
+      cursor.style.opacity = '1'
+    }
+    const onLeave = () => {
+      cursor.style.opacity = '0'
+    }
+
+    // transform (not left/top) stays on the compositor — feels instant
     const onMove = (event: Event) => {
-      const cursor = cursorRef.current
-      if (!cursor) return
       const {clientX, clientY} = event as MouseEvent
-      cursor.style.left = `${clientX + 10}px`
-      cursor.style.top = `${clientY + 10}px`
+      cursor.style.transform = `translate3d(${clientX + 10}px, ${clientY + 10}px, 0)`
     }
 
     target.addEventListener('mouseenter', onEnter)
     target.addEventListener('mouseleave', onLeave)
-    target.addEventListener('mousemove', onMove)
+    target.addEventListener('mousemove', onMove, {passive: true})
 
     return () => {
       target.removeEventListener('mouseenter', onEnter)
@@ -52,8 +63,7 @@ export function CustomCursor({currentIndex, totalImages}: CustomCursorProps) {
     <div
       ref={cursorRef}
       className={cn(
-        'custom-cursor pointer-events-none fixed z-[9999] whitespace-nowrap font-sans text-2xl leading-8 font-medium tracking-[-0.015rem] text-white mix-blend-difference normal-case opacity-0 max-lg:hidden',
-        visible && 'opacity-100',
+        'custom-cursor pointer-events-none fixed top-0 left-0 z-[9999] whitespace-nowrap font-sans text-2xl leading-8 font-medium tracking-[-0.015rem] text-white mix-blend-difference normal-case opacity-0 max-lg:hidden',
       )}
       aria-hidden="true"
     >
