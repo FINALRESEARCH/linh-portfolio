@@ -1,6 +1,6 @@
 'use client'
 
-import {useCallback, useEffect, useState} from 'react'
+import {useCallback, useEffect, useRef, useState} from 'react'
 import type {PortableTextBlock} from '@portabletext/types'
 import type {SanityImageSource} from '@sanity/image-url'
 import {EffectFade} from 'swiper/modules'
@@ -29,6 +29,7 @@ export function ProjectDetailSwiper({
 }: ProjectDetailSwiperProps) {
   const [swiper, setSwiper] = useState<SwiperType | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleImageLoad = useCallback(() => {
     document.querySelectorAll('.swiper-image-link').forEach((link) => link.classList.remove('loaded'))
@@ -37,15 +38,16 @@ export function ProjectDetailSwiper({
     if (!activeSlide) return
 
     const img = activeSlide.querySelector('img')
-    const loaded = () => {
-      setTimeout(() => activeSlide.classList.add('loaded'), 350)
+    const show = () => {
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current)
+      loadTimeoutRef.current = setTimeout(() => activeSlide.classList.add('loaded'), 350)
     }
 
     activeSlide.classList.remove('loaded')
     if (img?.complete) {
-      loaded()
+      show()
     } else if (img) {
-      img.addEventListener('load', loaded, {once: true})
+      img.addEventListener('load', show, {once: true})
     }
   }, [])
 
@@ -63,6 +65,7 @@ export function ProjectDetailSwiper({
 
     return () => {
       swiper.off('slideChange', onSlideChange)
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current)
     }
   }, [swiper, handleImageLoad])
 
@@ -141,13 +144,13 @@ export function ProjectDetailSwiper({
                 <div className="swiper-project-image-nav absolute inset-0 z-[1] flex justify-between">
                   <button
                     type="button"
-                    className="swiper-project-image-nav-prev h-full w-1/2 cursor-none border-0 bg-transparent p-0 max-md:cursor-auto"
+                    className="swiper-project-image-nav-prev h-full w-1/2 appearance-none border-0 bg-transparent p-0 shadow-none outline-none cursor-none max-md:cursor-auto"
                     aria-label="Previous image"
                     onClick={() => handleNavClick('prev')}
                   />
                   <button
                     type="button"
-                    className="swiper-project-image-nav-next h-full w-1/2 cursor-none border-0 bg-transparent p-0 max-md:cursor-auto"
+                    className="swiper-project-image-nav-next h-full w-1/2 appearance-none border-0 bg-transparent p-0 shadow-none outline-none cursor-none max-md:cursor-auto"
                     aria-label="Next image"
                     onClick={() => handleNavClick('next')}
                   />

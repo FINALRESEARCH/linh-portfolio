@@ -111,21 +111,26 @@
   /*
    * Fade slides are position:absolute by default, which collapses height.
    * Stack them in one full-size grid cell so the desktop column stays filled
-   * and images don't shrink on slide change.
+   * and images don't sit side-by-side (which reads as a vertical divider).
+   * Visibility is controlled by .swiper-image-link.loaded, not Swiper opacity.
    */
   .images-wrapper.is-home-carousel .swiper,
-  .images-wrapper.is-home-carousel .swiper-wrapper {
+  .images-wrapper.is-home-carousel .swiper-wrapper,
+  .images-wrapper.is-project-gallery .swiper,
+  .images-wrapper.is-project-gallery .swiper-wrapper {
     width: 100%;
     height: 100%;
   }
 
-  .images-wrapper.is-home-carousel .swiper-wrapper {
-    display: grid;
+  .images-wrapper.is-home-carousel .swiper-wrapper,
+  .images-wrapper.is-project-gallery .swiper-wrapper {
+    display: grid !important;
     align-items: stretch;
     justify-items: stretch;
   }
 
-  .images-wrapper.is-home-carousel .swiper-slide {
+  .images-wrapper.is-home-carousel .swiper-slide,
+  .images-wrapper.is-project-gallery .swiper-slide {
     grid-area: 1 / 1;
     position: relative !important;
     inset: auto !important;
@@ -142,9 +147,12 @@
     padding: 0;
     margin: 0;
     overflow: hidden;
+    /* Swiper fade sets inline opacity; with relative stacking that blanks slides. */
+    opacity: 1 !important;
   }
 
-  .images-wrapper.is-home-carousel .swiper-image-link {
+  .images-wrapper.is-home-carousel .swiper-image-link,
+  .images-wrapper.is-project-gallery .swiper-image-link {
     width: auto;
     max-width: 100%;
     height: 100%;
@@ -156,7 +164,8 @@
     justify-content: flex-end;
   }
 
-  .images-wrapper.is-home-carousel .swiper-slide-image {
+  .images-wrapper.is-home-carousel .swiper-slide-image,
+  .images-wrapper.is-project-gallery .swiper-slide-image {
     width: auto !important;
     height: 100% !important;
     max-width: 100% !important;
@@ -270,4 +279,28 @@
       @apply h-auto max-h-none w-full;
     }
   }
+}
+
+/*
+ * Unlayered so these beat Swiper's own stylesheet (also unlayered).
+ * Keeps fade slides stacked instead of sitting side-by-side.
+ */
+.images-wrapper.is-home-carousel .swiper-wrapper,
+.images-wrapper.is-project-gallery .swiper-wrapper {
+  display: grid !important;
+}
+
+.images-wrapper.is-home-carousel .swiper-slide,
+.images-wrapper.is-project-gallery .swiper-slide {
+  opacity: 1 !important;
+}
+
+.swiper-project-image-nav-prev,
+.swiper-project-image-nav-next {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
 }
