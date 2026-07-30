@@ -118,12 +118,14 @@
   /*
    * Home carousel: mirrors reference/webflow slide layout.
    * Image fills 94% of column height (space left for title + chevrons).
-   * object-contain + center top: full height when it fits; centered when
-   * too wide for the column.
+   * object-contain + center: full height when it fits; centered in the
+   * column when too wide (or letterboxed) to fill the frame.
    */
   .images-wrapper.is-home-carousel .home-carousel-frame {
     min-height: 0;
     overflow: hidden;
+    justify-content: center;
+    align-items: center;
   }
 
   .images-wrapper.is-home-carousel .home-carousel-link {
@@ -141,7 +143,7 @@
 
   .images-wrapper.is-home-carousel .home-carousel-image {
     object-fit: contain !important;
-    object-position: center top !important;
+    object-position: center center !important;
     visibility: visible !important;
     opacity: 1 !important;
   }
@@ -240,11 +242,12 @@
     max-height: 94%;
     width: 100%;
     min-height: 0;
+    margin-inline: auto;
   }
 
   .images-wrapper.is-project-gallery .project-gallery-image {
     object-fit: contain !important;
-    object-position: center top !important;
+    object-position: center center !important;
     visibility: visible !important;
     opacity: 1 !important;
   }

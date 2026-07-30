@@ -111,16 +111,15 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
     <>
       <div
         className={cn(
-          'images-wrapper is-home-carousel flex h-full min-h-0 w-[65dvw] max-w-[65dvw] flex-col items-center justify-start',
+          'images-wrapper is-home-carousel flex h-full min-h-0 w-[65dvw] max-w-[65dvw] flex-col items-center justify-center',
           'max-md:order-2 max-md:relative max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
         {/*
           Reference/webflow: image fills ~94% of column height (room for title
-          + chevrons). object-contain + center top: full height when possible,
-          horizontally centered when too wide to fit.
+          + chevrons). object-contain + center in the column.
         */}
-        <div className="home-carousel-frame relative flex h-full min-h-0 w-full flex-1 flex-col items-center justify-start max-md:h-auto max-md:flex-none max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
+        <div className="home-carousel-frame relative flex h-full min-h-0 w-full flex-1 flex-col items-center justify-center max-md:h-auto max-md:flex-none max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
           <Link href={`/projects/${active.slug}`} className="home-carousel-link">
             <SanityImage
               key={active._id}
