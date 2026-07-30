@@ -117,8 +117,9 @@
 
   /*
    * Home carousel: mirrors reference/webflow slide layout.
-   * Image link max-height 94%; title is a sibling pinned to the slide
-   * bottom so it sits level with the fixed chevrons (not on the image).
+   * Image fills 94% of column height (space left for title + chevrons).
+   * object-contain + center top: full height when it fits; centered when
+   * too wide for the column.
    */
   .images-wrapper.is-home-carousel .home-carousel-frame {
     min-height: 0;
@@ -126,14 +127,12 @@
   }
 
   .images-wrapper.is-home-carousel .home-carousel-link {
-    display: inline-flex;
-    max-width: 100%;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 94%;
     max-height: 94%;
-    height: auto;
-    align-items: flex-start;
-    justify-content: flex-end;
-    object-fit: contain;
-    object-position: 100% 0%;
+    max-width: 100%;
   }
 
   .images-wrapper.is-home-carousel .home-carousel-link:hover {
@@ -141,14 +140,8 @@
   }
 
   .images-wrapper.is-home-carousel .home-carousel-image {
-    display: block;
-    pointer-events: none;
-    width: auto !important;
-    height: auto !important;
-    max-width: 100% !important;
-    max-height: min(94%, calc(100svh - 3rem)) !important;
-    object-fit: contain;
-    object-position: right top;
+    object-fit: contain !important;
+    object-position: center top !important;
     visibility: visible !important;
     opacity: 1 !important;
   }
@@ -240,21 +233,20 @@
     opacity: 0;
   }
 
-  /* Project gallery: single in-flow image (no absolute stack / .loaded fade) */
+  /* Project gallery: same full-height contain as reference (94% for chevrons) */
   .images-wrapper.is-project-gallery .project-gallery-frame {
+    position: relative;
+    height: 94%;
+    max-height: 94%;
+    width: 100%;
     min-height: 0;
   }
 
   .images-wrapper.is-project-gallery .project-gallery-image {
-    display: block;
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: min(94%, calc(100svh - 3rem));
-    object-fit: contain;
-    object-position: right center;
-    visibility: visible;
-    opacity: 1;
+    object-fit: contain !important;
+    object-position: center top !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .swiper-arrow {
@@ -321,15 +313,13 @@
     }
 
     .images-wrapper.is-home-carousel .home-carousel-link {
-      height: auto;
-      max-height: none;
-      justify-content: center;
+      width: 100%;
+      height: 70svh;
+      max-height: 70svh;
     }
 
     .images-wrapper.is-home-carousel .home-carousel-image {
-      height: auto !important;
-      max-height: 70svh !important;
-      object-position: center;
+      object-position: center center !important;
     }
 
     .images-wrapper.is-home-carousel .home-carousel-title {
@@ -376,16 +366,13 @@
 
     .images-wrapper.is-project-gallery .project-gallery-frame {
       width: 100%;
-      justify-content: center;
+      height: 70svh;
+      max-height: none;
     }
 
     .images-wrapper.is-project-gallery .project-gallery-image {
-      width: 100% !important;
-      max-width: 100% !important;
-      height: auto !important;
-      max-height: none !important;
-      object-fit: contain;
-      object-position: center;
+      object-fit: contain !important;
+      object-position: center center !important;
     }
   }
 }

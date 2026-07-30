@@ -10,6 +10,23 @@ type SanityImageProps = {
   priority?: boolean
   loading?: 'lazy' | 'eager'
   sizes?: string
+  /** Fill a positioned parent — used for full-height gallery frames */
+  fill?: boolean
+}
+
+type AssetRefImage = {
+  asset?: {_ref?: string; _id?: string}
+}
+
+function getAssetDimensions(image: SanityImageSource): {width: number; height: number} {
+  const asset = (image as AssetRefImage | null | undefined)?.asset
+  const ref = String(asset?._ref ?? asset?._id ?? '')
+  const match = ref.match(/-(\d+)x(\d+)-/)
+  if (match) {
+    return {width: Number(match[1]), height: Number(match[2])}
+  }
+  // Landscape fallback so layout doesn't collapse to a tiny square
+  return {width: 2400, height: 1600}
 }
 
 export function SanityImage({
@@ -19,19 +36,34 @@ export function SanityImage({
   priority = false,
   loading,
   sizes = '(max-width: 767px) 100vw, 65vw',
+  fill = false,
 }: SanityImageProps) {
-  const imageBuilder = urlFor(image).auto('format')
-  const src = imageBuilder.url()
+  const {width, height} = getAssetDimensions(image)
+  const src = urlFor(image).width(Math.min(width, 2400)).auto('format').url()
 
   if (!src) return null
+
+  if (fill) {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        className={cn('object-contain', className)}
+        fill
+        sizes={sizes}
+        priority={priority}
+        loading={loading}
+      />
+    )
+  }
 
   return (
     <Image
       src={src}
       alt={alt}
       className={cn('object-contain', className)}
-      width={2000}
-      height={2000}
+      width={width}
+      height={height}
       sizes={sizes}
       priority={priority}
       loading={loading}

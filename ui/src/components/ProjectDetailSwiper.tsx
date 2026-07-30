@@ -75,13 +75,14 @@ export function ProjectDetailSwiper({
           'max-md:order-1 max-md:mt-0 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
-        <div className="relative flex min-h-0 w-full flex-1 items-center justify-end max-md:flex-none max-md:justify-center">
-          <div className="project-gallery-frame relative flex h-full max-h-full w-full items-center justify-end max-md:h-auto max-md:justify-center">
+        <div className="relative flex min-h-0 w-full flex-1 items-start justify-center max-md:flex-none max-md:justify-center">
+          <div className="project-gallery-frame relative w-full max-md:h-auto max-md:justify-center">
             <SanityImage
               image={activeImage}
               alt={`${title} — image ${activeIndex + 1}`}
               className="project-gallery-image"
               sizes="(max-width: 767px) 100vw, 65vw"
+              fill
               priority
               loading="eager"
             />

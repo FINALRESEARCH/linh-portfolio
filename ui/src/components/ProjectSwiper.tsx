@@ -116,11 +116,11 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
         )}
       >
         {/*
-          Match reference/webflow slide structure:
-          image link + title as siblings; title absolute at slide bottom
-          (level with fixed chevrons), not overlaid on the image.
+          Reference/webflow: image fills ~94% of column height (room for title
+          + chevrons). object-contain + center top: full height when possible,
+          horizontally centered when too wide to fit.
         */}
-        <div className="home-carousel-frame relative flex h-full min-h-0 w-full flex-1 flex-col items-end justify-start max-md:h-auto max-md:flex-none max-md:items-center max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
+        <div className="home-carousel-frame relative flex h-full min-h-0 w-full flex-1 flex-col items-center justify-start max-md:h-auto max-md:flex-none max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
           <Link href={`/projects/${active.slug}`} className="home-carousel-link">
             <SanityImage
               key={active._id}
@@ -128,6 +128,7 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
               alt={active.title}
               className="home-carousel-image"
               sizes="(max-width: 767px) 100vw, 65vw"
+              fill
               priority
               loading="eager"
             />
