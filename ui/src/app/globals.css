@@ -108,6 +108,13 @@
     opacity: 1;
   }
 
+  /* Project gallery controls visibility via parent opacity, not .loaded */
+  .images-wrapper.is-project-gallery .swiper-image-link > img,
+  .images-wrapper.is-project-gallery .project-gallery-image {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
   /*
    * Fade slides are position:absolute by default, which collapses height.
    * Stack them in one full-size grid cell so the desktop column stays filled
@@ -115,22 +122,18 @@
    * Visibility is controlled by .swiper-image-link.loaded, not Swiper opacity.
    */
   .images-wrapper.is-home-carousel .swiper,
-  .images-wrapper.is-home-carousel .swiper-wrapper,
-  .images-wrapper.is-project-gallery .swiper,
-  .images-wrapper.is-project-gallery .swiper-wrapper {
+  .images-wrapper.is-home-carousel .swiper-wrapper {
     width: 100%;
     height: 100%;
   }
 
-  .images-wrapper.is-home-carousel .swiper-wrapper,
-  .images-wrapper.is-project-gallery .swiper-wrapper {
+  .images-wrapper.is-home-carousel .swiper-wrapper {
     display: grid !important;
     align-items: stretch;
     justify-items: stretch;
   }
 
-  .images-wrapper.is-home-carousel .swiper-slide,
-  .images-wrapper.is-project-gallery .swiper-slide {
+  .images-wrapper.is-home-carousel .swiper-slide {
     grid-area: 1 / 1;
     position: relative !important;
     inset: auto !important;
@@ -151,8 +154,7 @@
     opacity: 1 !important;
   }
 
-  .images-wrapper.is-home-carousel .swiper-image-link,
-  .images-wrapper.is-project-gallery .swiper-image-link {
+  .images-wrapper.is-home-carousel .swiper-image-link {
     width: auto;
     max-width: 100%;
     height: 100%;
@@ -164,8 +166,7 @@
     justify-content: flex-end;
   }
 
-  .images-wrapper.is-home-carousel .swiper-slide-image,
-  .images-wrapper.is-project-gallery .swiper-slide-image {
+  .images-wrapper.is-home-carousel .swiper-slide-image {
     width: auto !important;
     height: 100% !important;
     max-width: 100% !important;
@@ -181,6 +182,23 @@
     margin: 0;
     display: inline-flex;
     white-space: nowrap;
+  }
+
+  /* Project gallery: single in-flow image (no absolute stack / .loaded fade) */
+  .images-wrapper.is-project-gallery .project-gallery-frame {
+    min-height: 0;
+  }
+
+  .images-wrapper.is-project-gallery .project-gallery-image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: min(94%, calc(100svh - 3rem));
+    object-fit: contain;
+    object-position: right center;
+    visibility: visible;
+    opacity: 1;
   }
 
   .swiper-arrow {
@@ -275,23 +293,24 @@
       object-position: center;
     }
 
-    .images-wrapper.is-project-gallery .swiper-slide-image {
-      @apply h-auto max-h-none w-full;
+    .images-wrapper.is-project-gallery .project-gallery-image {
+      max-height: 70svh;
+      width: 100%;
+      height: auto;
+      object-position: center;
     }
   }
 }
 
 /*
  * Unlayered so these beat Swiper's own stylesheet (also unlayered).
- * Keeps fade slides stacked instead of sitting side-by-side.
+ * Keeps home fade slides stacked instead of sitting side-by-side.
  */
-.images-wrapper.is-home-carousel .swiper-wrapper,
-.images-wrapper.is-project-gallery .swiper-wrapper {
+.images-wrapper.is-home-carousel .swiper-wrapper {
   display: grid !important;
 }
 
-.images-wrapper.is-home-carousel .swiper-slide,
-.images-wrapper.is-project-gallery .swiper-slide {
+.images-wrapper.is-home-carousel .swiper-slide {
   opacity: 1 !important;
 }
 

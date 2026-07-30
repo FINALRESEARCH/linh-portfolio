@@ -23,9 +23,8 @@ export function CustomCursor({currentIndex, totalImages}: CustomCursorProps) {
   useEffect(() => {
     if (!isDesktop()) return
 
-    const slides = document.querySelectorAll(
-      '.images-wrapper.is-project-gallery .swiper-image-link',
-    )
+    const target = document.querySelector('.images-wrapper.is-project-gallery')
+    if (!target) return
 
     const onEnter = () => setVisible(true)
     const onLeave = () => setVisible(false)
@@ -38,21 +37,14 @@ export function CustomCursor({currentIndex, totalImages}: CustomCursorProps) {
       cursor.style.top = `${clientY + 10}px`
     }
 
-    slides.forEach((slide) => {
-      slide.addEventListener('mouseenter', onEnter)
-      slide.addEventListener('mouseleave', onLeave)
-      slide.addEventListener('mousemove', onMove)
-    })
-
-    document.addEventListener('mousemove', onMove)
+    target.addEventListener('mouseenter', onEnter)
+    target.addEventListener('mouseleave', onLeave)
+    target.addEventListener('mousemove', onMove)
 
     return () => {
-      slides.forEach((slide) => {
-        slide.removeEventListener('mouseenter', onEnter)
-        slide.removeEventListener('mouseleave', onLeave)
-        slide.removeEventListener('mousemove', onMove)
-      })
-      document.removeEventListener('mousemove', onMove)
+      target.removeEventListener('mouseenter', onEnter)
+      target.removeEventListener('mouseleave', onLeave)
+      target.removeEventListener('mousemove', onMove)
     }
   }, [])
 

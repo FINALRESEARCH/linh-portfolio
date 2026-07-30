@@ -57,7 +57,7 @@ export default async function RootLayout({
       <body>
         {children}
         <div className="balinhciaga pointer-events-none fixed inset-0 z-[999] hidden h-svh w-svw bg-[url('/images/BALINHCIAGA_WATERMARK_DESKTOP.svg')] bg-cover bg-center bg-no-repeat max-md:h-screen max-md:bg-[url('/images/BALINHCIAGA_WATERMARK_MOBILE.svg')]" />
-        <SanityLive />
+        <SanityLive onReconnect={false} />
         {isDraftMode ? <VisualEditing /> : null}
       </body>
     </html>
