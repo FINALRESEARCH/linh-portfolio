@@ -135,11 +135,11 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
     <>
       <div
         className={cn(
-          'images-wrapper is-home-carousel flex h-full w-[65dvw] max-w-[65dvw] flex-col items-end justify-end',
+          'images-wrapper is-home-carousel flex h-full min-h-0 w-[65dvw] max-w-[65dvw] flex-col items-center justify-center',
           'max-md:order-2 max-md:relative max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
-        <div className="h-full w-full min-h-0 max-md:flex max-md:h-auto max-md:items-center max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
+        <div className="h-full min-h-0 w-full max-md:flex max-md:h-auto max-md:items-center max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
           <Swiper
             className="swiper swiper-projects !h-full w-full max-md:!h-auto"
             modules={[EffectFade, Keyboard]}
