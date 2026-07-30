@@ -184,6 +184,11 @@
     white-space: nowrap;
   }
 
+  .images-wrapper.is-home-carousel .swiper-slide:not(.swiper-slide-active) .swiper-slide-title {
+    visibility: hidden;
+    opacity: 0;
+  }
+
   /* Project gallery: single in-flow image (no absolute stack / .loaded fade) */
   .images-wrapper.is-project-gallery .project-gallery-frame {
     min-height: 0;
@@ -291,6 +296,11 @@
       max-width: 100% !important;
       max-height: 70svh !important;
       object-position: center;
+    }
+
+    /* Beat the desktop display:inline-flex rule so only the footer title shows */
+    .images-wrapper.is-home-carousel .swiper-slide-title {
+      display: none !important;
     }
 
     .images-wrapper.is-project-gallery .project-gallery-frame {
