@@ -116,11 +116,35 @@
   }
 
   /*
-   * Fade slides are position:absolute by default, which collapses height.
-   * Stack them in one full-size grid cell so the desktop column stays filled
-   * and images don't sit side-by-side (which reads as a vertical divider).
-   * Visibility is controlled by .swiper-image-link.loaded, not Swiper opacity.
+   * Home carousel: single in-flow image (no Swiper fade stacking).
+   * Avoids production shrink + stacked slides from opacity:1 overrides.
    */
+  .images-wrapper.is-home-carousel .home-carousel-frame {
+    min-height: 0;
+  }
+
+  .images-wrapper.is-home-carousel .home-carousel-link {
+    display: flex;
+    max-width: 100%;
+    max-height: 94%;
+    height: 100%;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .images-wrapper.is-home-carousel .home-carousel-image {
+    display: block;
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: min(94%, calc(100svh - 3rem)) !important;
+    object-fit: contain;
+    object-position: right center;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Legacy Swiper home rules kept for safety if markup is restored */
   .images-wrapper.is-home-carousel .swiper,
   .images-wrapper.is-home-carousel .swiper-wrapper {
     width: 100%;
@@ -150,8 +174,18 @@
     padding: 0;
     margin: 0;
     overflow: hidden;
-    /* Swiper fade sets inline opacity; with relative stacking that blanks slides. */
     opacity: 1 !important;
+  }
+
+  .images-wrapper.is-home-carousel .swiper-slide:not(.swiper-slide-active) {
+    visibility: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .images-wrapper.is-home-carousel .swiper-slide-active {
+    visibility: visible;
+    z-index: 1;
   }
 
   .images-wrapper.is-home-carousel .swiper-image-link {
@@ -168,9 +202,9 @@
 
   .images-wrapper.is-home-carousel .swiper-slide-image {
     width: auto !important;
-    height: 100% !important;
+    height: auto !important;
     max-width: 100% !important;
-    max-height: 100% !important;
+    max-height: min(94%, calc(100svh - 3rem)) !important;
     margin: 0 !important;
     object-fit: contain;
     object-position: right center;
@@ -263,6 +297,17 @@
 
     .swiper-slide-image {
       @apply h-auto max-h-[70svh] w-full max-w-full align-middle;
+    }
+
+    .images-wrapper.is-home-carousel .home-carousel-link {
+      height: auto;
+      max-height: none;
+      justify-content: center;
+    }
+
+    .images-wrapper.is-home-carousel .home-carousel-image {
+      max-height: 70svh !important;
+      object-position: center;
     }
 
     .images-wrapper.is-home-carousel .swiper,
