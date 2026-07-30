@@ -116,32 +116,49 @@
   }
 
   /*
-   * Home carousel: single in-flow image (no Swiper fade stacking).
-   * Avoids production shrink + stacked slides from opacity:1 overrides.
+   * Home carousel: mirrors reference/webflow slide layout.
+   * Image link max-height 94%; title is a sibling pinned to the slide
+   * bottom so it sits level with the fixed chevrons (not on the image).
    */
   .images-wrapper.is-home-carousel .home-carousel-frame {
     min-height: 0;
+    overflow: hidden;
   }
 
   .images-wrapper.is-home-carousel .home-carousel-link {
-    display: flex;
+    display: inline-flex;
     max-width: 100%;
     max-height: 94%;
     height: 100%;
     align-items: center;
     justify-content: flex-end;
+    object-fit: contain;
+    object-position: 100% 50%;
+  }
+
+  .images-wrapper.is-home-carousel .home-carousel-link:hover {
+    opacity: 1;
   }
 
   .images-wrapper.is-home-carousel .home-carousel-image {
     display: block;
+    pointer-events: none;
     width: auto !important;
-    height: auto !important;
+    height: 100% !important;
     max-width: 100% !important;
-    max-height: min(94%, calc(100svh - 3rem)) !important;
+    max-height: 100% !important;
     object-fit: contain;
     object-position: right center;
     visibility: visible !important;
     opacity: 1 !important;
+  }
+
+  .images-wrapper.is-home-carousel .home-carousel-title {
+    position: absolute;
+    inset: auto 0% 0%;
+    margin-bottom: 0;
+    display: inline-flex;
+    font-family: var(--font-sans);
   }
 
   /* Legacy Swiper home rules kept for safety if markup is restored */
@@ -299,6 +316,10 @@
       @apply h-auto max-h-[70svh] w-full max-w-full align-middle;
     }
 
+    .images-wrapper.is-home-carousel .home-carousel-frame {
+      overflow: visible;
+    }
+
     .images-wrapper.is-home-carousel .home-carousel-link {
       height: auto;
       max-height: none;
@@ -306,8 +327,13 @@
     }
 
     .images-wrapper.is-home-carousel .home-carousel-image {
+      height: auto !important;
       max-height: 70svh !important;
       object-position: center;
+    }
+
+    .images-wrapper.is-home-carousel .home-carousel-title {
+      display: none !important;
     }
 
     .images-wrapper.is-home-carousel .swiper,

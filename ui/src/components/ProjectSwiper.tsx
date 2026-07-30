@@ -115,27 +115,25 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
           'max-md:order-2 max-md:relative max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
-        <div className="relative flex h-full min-h-0 w-full flex-1 items-center justify-end max-md:h-auto max-md:flex-none max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
-          <div className="home-carousel-frame relative flex h-full max-h-full w-full items-center justify-end max-md:h-auto max-md:justify-center">
-            <Link href={`/projects/${active.slug}`} className="home-carousel-link relative block max-h-full">
-              <SanityImage
-                key={active._id}
-                image={active.coverImage}
-                alt={active.title}
-                className="home-carousel-image"
-                sizes="(max-width: 767px) 100vw, 65vw"
-                priority
-                loading="eager"
-              />
-              <div
-                className={cn(
-                  finePrint,
-                  'absolute inset-x-0 bottom-0 mb-0 inline-flex font-sans max-md:hidden',
-                )}
-              >
-                {active.title}
-              </div>
-            </Link>
+        {/*
+          Match reference/webflow slide structure:
+          image link + title as siblings; title absolute at slide bottom
+          (level with fixed chevrons), not overlaid on the image.
+        */}
+        <div className="home-carousel-frame relative flex h-full min-h-0 w-full flex-1 flex-col items-end justify-center max-md:h-auto max-md:flex-none max-md:items-center max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
+          <Link href={`/projects/${active.slug}`} className="home-carousel-link">
+            <SanityImage
+              key={active._id}
+              image={active.coverImage}
+              alt={active.title}
+              className="home-carousel-image"
+              sizes="(max-width: 767px) 100vw, 65vw"
+              priority
+              loading="eager"
+            />
+          </Link>
+          <div className={cn(finePrint, 'home-carousel-title max-md:hidden')}>
+            {active.title}
           </div>
         </div>
 
