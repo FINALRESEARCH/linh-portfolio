@@ -285,8 +285,14 @@
     transition: width 0.8s;
   }
 
+  /*
+   * Project credits are often one line per Portable Text block.
+   * Don't add paragraph margins — fine-print line-height (0.9rem) should
+   * stack the lines tightly (matches Webflow richtext credits).
+   */
   .richtext p {
-    @apply mb-2 last:mb-0;
+    margin: 0;
+    line-height: inherit;
   }
 
   @media screen and (max-width: 767px) {
