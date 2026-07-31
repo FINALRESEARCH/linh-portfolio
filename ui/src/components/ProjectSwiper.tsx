@@ -2,7 +2,7 @@
 
 import {useCallback, useEffect, useRef, useState} from 'react'
 import Link from 'next/link'
-import type {SanityImageSource} from '@sanity/image-url'
+import type {PortfolioImage} from '@/sanity/types'
 import {SanityImage} from '@/components/SanityImage'
 import {cn} from '@/lib/cn'
 
@@ -15,7 +15,7 @@ type ProjectSlide = {
   _id: string
   title: string
   slug: string
-  coverImage: SanityImageSource
+  coverImage: PortfolioImage
 }
 
 type ProjectSwiperProps = {

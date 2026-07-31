@@ -2,6 +2,15 @@ import type {PortableTextBlock} from '@portabletext/types'
 import type {SanityImageSource} from '@sanity/image-url'
 import type {LinkPreview, SiteIcons} from '@/lib/seo'
 
+export type LocalImage = {
+  _type: 'localImage'
+  src: string
+  width: number
+  height: number
+}
+
+export type PortfolioImage = SanityImageSource | LocalImage
+
 export type SiteSettings = {
   name: string
   tagline: string
@@ -19,15 +28,24 @@ export type ProjectListItem = {
   title: string
   slug: string
   order: number
-  coverImage: SanityImageSource
+  coverImage: PortfolioImage
 }
 
 export type ProjectDetail = ProjectListItem & {
-  gallery: SanityImageSource[]
+  gallery: PortfolioImage[]
   description?: PortableTextBlock[]
   linkPreview?: LinkPreview
 }
 
 export type ProjectSlug = {
   slug: string
+}
+
+export function isLocalImage(image: PortfolioImage | null | undefined): image is LocalImage {
+  return Boolean(
+    image &&
+      typeof image === 'object' &&
+      '_type' in image &&
+      (image as LocalImage)._type === 'localImage',
+  )
 }

@@ -2,11 +2,18 @@ import {sanityFetch} from '@/sanity/live'
 import {client} from '@/sanity/client'
 import {
   PROJECTS_LIST_QUERY,
+  PROJECT_BY_SLUG_QUERY,
   PROJECT_SLUGS_QUERY,
   SITE_SETTINGS_QUERY,
 } from '@/sanity/queries'
 import {isSanityConfigured} from '@/sanity/env'
-import type {ProjectListItem, ProjectSlug, SiteSettings} from '@/sanity/types'
+import {
+  getPlaceholderProjectBySlug,
+  getPlaceholderProjects,
+  PLACEHOLDER_PROJECTS,
+  PLACEHOLDER_SITE_SETTINGS,
+} from '@/lib/placeholders'
+import type {ProjectDetail, ProjectListItem, ProjectSlug, SiteSettings} from '@/sanity/types'
 
 export async function fetchSanityData<T>(
   query: string,
@@ -24,33 +31,49 @@ export async function fetchSanityData<T>(
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
-  if (!isSanityConfigured) return null
+  if (!isSanityConfigured) return PLACEHOLDER_SITE_SETTINGS
 
   try {
-    return await fetchSanityData<SiteSettings | null>(SITE_SETTINGS_QUERY)
+    const settings = await fetchSanityData<SiteSettings | null>(SITE_SETTINGS_QUERY)
+    return settings ?? PLACEHOLDER_SITE_SETTINGS
   } catch {
-    return null
+    return PLACEHOLDER_SITE_SETTINGS
   }
 }
 
 export async function getProjects(): Promise<ProjectListItem[]> {
-  if (!isSanityConfigured) return []
+  if (!isSanityConfigured) return getPlaceholderProjects()
 
   try {
     const projects = await fetchSanityData<ProjectListItem[] | null>(PROJECTS_LIST_QUERY)
-    return projects ?? []
+    return projects?.length ? projects : getPlaceholderProjects()
   } catch {
-    return []
+    return getPlaceholderProjects()
+  }
+}
+
+export async function getProjectBySlug(slug: string): Promise<ProjectDetail | null> {
+  if (!isSanityConfigured) return getPlaceholderProjectBySlug(slug)
+
+  try {
+    const project = await fetchSanityData<ProjectDetail | null>(PROJECT_BY_SLUG_QUERY, {slug})
+    return project ?? getPlaceholderProjectBySlug(slug)
+  } catch {
+    return getPlaceholderProjectBySlug(slug)
   }
 }
 
 export async function getProjectSlugs(): Promise<ProjectSlug[]> {
-  if (!isSanityConfigured) return []
+  if (!isSanityConfigured) {
+    return PLACEHOLDER_PROJECTS.map(({slug}) => ({slug}))
+  }
 
   try {
     const slugs = await fetchSanityData<ProjectSlug[] | null>(PROJECT_SLUGS_QUERY)
-    return slugs ?? []
+    return slugs?.length
+      ? slugs
+      : PLACEHOLDER_PROJECTS.map(({slug}) => ({slug}))
   } catch {
-    return []
+    return PLACEHOLDER_PROJECTS.map(({slug}) => ({slug}))
   }
 }

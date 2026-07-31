@@ -18,7 +18,16 @@ linh-portfolio/
 
 - Node.js 22.12+
 - npm 12+
-- A Sanity project ([sanity.io/manage](https://www.sanity.io/manage))
+- A Sanity project ([sanity.io/manage](https://www.sanity.io/manage)) — optional for a local visual preview
+
+## Placeholder content
+
+If Sanity env vars are missing (or the CMS returns no projects), the UI falls back to local demo projects:
+
+- **SHOP KING LIS** — `ui/public/images/shop-king-lis-1.png` … `-3.png`
+- **FANCI CLUB** — `ui/public/images/fanci-club-1.png` … `-3.png`
+
+`-1` is the home cover; `-1` through `-3` are the project gallery. This lets anyone who clones the repo see the layout without Studio credentials.
 
 ## Environment variables
 

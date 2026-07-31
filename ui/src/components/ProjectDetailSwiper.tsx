@@ -2,7 +2,7 @@
 
 import {useCallback, useEffect, useRef, useState} from 'react'
 import type {PortableTextBlock} from '@portabletext/types'
-import type {SanityImageSource} from '@sanity/image-url'
+import type {PortfolioImage} from '@/sanity/types'
 import {SanityImage} from '@/components/SanityImage'
 import {CustomCursor} from '@/components/CustomCursor'
 import {PortableText} from '@/components/PortableText'
@@ -12,7 +12,7 @@ const finePrint =
   'text-[0.7rem] leading-[0.9rem] tracking-[-0.005rem] max-md:text-[0.6rem] max-md:leading-[0.7rem]'
 
 type ProjectDetailSwiperProps = {
-  images: SanityImageSource[]
+  images: PortfolioImage[]
   title: string
   description?: PortableTextBlock[]
 }

@@ -2,9 +2,10 @@ import Image from 'next/image'
 import type {SanityImageSource} from '@sanity/image-url'
 import {urlFor} from '@/sanity/lib/image'
 import {cn} from '@/lib/cn'
+import {isLocalImage, type PortfolioImage} from '@/sanity/types'
 
 type SanityImageProps = {
-  image: SanityImageSource
+  image: PortfolioImage
   alt: string
   className?: string
   priority?: boolean
@@ -38,6 +39,35 @@ export function SanityImage({
   sizes = '(max-width: 767px) 100vw, 65vw',
   fill = false,
 }: SanityImageProps) {
+  if (isLocalImage(image)) {
+    if (fill) {
+      return (
+        <Image
+          src={image.src}
+          alt={alt}
+          className={cn('object-contain', className)}
+          fill
+          sizes={sizes}
+          priority={priority}
+          loading={loading}
+        />
+      )
+    }
+
+    return (
+      <Image
+        src={image.src}
+        alt={alt}
+        className={cn('object-contain', className)}
+        width={image.width}
+        height={image.height}
+        sizes={sizes}
+        priority={priority}
+        loading={loading}
+      />
+    )
+  }
+
   const {width, height} = getAssetDimensions(image)
   const src = urlFor(image).width(Math.min(width, 2400)).auto('format').url()
 

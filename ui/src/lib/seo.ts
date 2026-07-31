@@ -1,5 +1,6 @@
 import type {SanityImageSource} from '@sanity/image-url'
 import {urlFor} from '@/sanity/lib/image'
+import {isLocalImage, type PortfolioImage} from '@/sanity/types'
 
 export const DEFAULT_OG_IMAGE_PATH = '/images/opengraph.jpg'
 export const DEFAULT_FAVICON_PATH = '/images/favicon.png'
@@ -8,7 +9,7 @@ export const DEFAULT_APPLE_TOUCH_ICON_PATH = '/images/webclip.png'
 export type LinkPreview = {
   title?: string
   description?: string
-  image?: SanityImageSource
+  image?: PortfolioImage
 }
 
 export type SiteIcons = {
@@ -28,8 +29,15 @@ export function getMetadataBase(): URL {
   return new URL('http://localhost:3000')
 }
 
-export function getOgImageUrl(image?: SanityImageSource | null): string | undefined {
+export function getOgImageUrl(
+  image?: PortfolioImage | null,
+  metadataBase: URL = getMetadataBase(),
+): string | undefined {
   if (!image) return undefined
+
+  if (isLocalImage(image)) {
+    return new URL(image.src, metadataBase).toString()
+  }
 
   return urlFor(image).width(1200).height(630).fit('crop').url()
 }
@@ -44,10 +52,10 @@ export function getIconImageUrl(
 }
 
 export function resolveOgImageUrl(
-  image?: SanityImageSource | null,
+  image?: PortfolioImage | null,
   metadataBase: URL = getMetadataBase(),
 ): string {
-  return getOgImageUrl(image) ?? new URL(DEFAULT_OG_IMAGE_PATH, metadataBase).toString()
+  return getOgImageUrl(image, metadataBase) ?? new URL(DEFAULT_OG_IMAGE_PATH, metadataBase).toString()
 }
 
 export function resolveLinkPreview({
@@ -60,7 +68,7 @@ export function resolveLinkPreview({
   linkPreview?: LinkPreview | null
   fallbackTitle: string
   fallbackDescription: string
-  fallbackImage?: SanityImageSource | null
+  fallbackImage?: PortfolioImage | null
   metadataBase?: URL
 }) {
   return {
