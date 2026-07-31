@@ -75,18 +75,17 @@ export function ProjectDetailSwiper({
           'max-md:order-1 max-md:mt-0 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
         )}
       >
-        <div className="relative flex min-h-0 w-full flex-1 items-center justify-center max-md:flex-none max-md:items-start max-md:justify-start">
+        <div className="relative flex min-h-0 w-full flex-1 items-center justify-start max-md:flex-none max-md:items-start max-md:justify-center">
           {/*
-            Keep an explicit height on mobile — Next/Image `fill` is absolute
-            and collapses if the frame is height:auto.
+            Non-fill + flex-start so portrait images sit on the left of the
+            column (fill + object-position was losing to default 50% 50%).
           */}
-          <div className="project-gallery-frame relative w-full">
+          <div className="project-gallery-frame relative flex w-full items-center justify-start max-md:justify-center">
             <SanityImage
               image={activeImage}
               alt={`${title} — image ${activeIndex + 1}`}
               className="project-gallery-image"
               sizes="(max-width: 767px) 100vw, 65vw"
-              fill
               priority
               loading="eager"
             />
