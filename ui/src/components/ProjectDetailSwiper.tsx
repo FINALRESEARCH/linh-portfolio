@@ -91,23 +91,17 @@ export function ProjectDetailSwiper({
             />
 
             {/*
-              Stop above the fixed chevrons so one click can't hit both
-              the half-page next zone and the next chevron.
+              Full-frame click advances next in order (1→2→3…).
+              Left/right prev/next halves made left-side clicks jump
+              backward, so the cursor counter felt broken there.
+              Explicit prev/next stays on the chevrons.
             */}
-            <div className="absolute inset-x-0 top-0 bottom-12 z-[1] hidden md:flex">
-              <button
-                type="button"
-                className="h-full w-1/2 cursor-none appearance-none border-0 bg-transparent p-0"
-                aria-label="Previous image"
-                onClick={() => goTo('prev')}
-              />
-              <button
-                type="button"
-                className="h-full w-1/2 cursor-none appearance-none border-0 bg-transparent p-0"
-                aria-label="Next image"
-                onClick={() => goTo('next')}
-              />
-            </div>
+            <button
+              type="button"
+              className="absolute inset-x-0 top-0 bottom-12 z-[1] hidden w-full cursor-none appearance-none border-0 bg-transparent p-0 md:block"
+              aria-label="Next image"
+              onClick={() => goTo('next')}
+            />
           </div>
         </div>
 
