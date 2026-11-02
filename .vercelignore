@@ -1,0 +1,6 @@
+.figmog
+node_modules
+.next
+.turbo
+**/.env.local
+reference
