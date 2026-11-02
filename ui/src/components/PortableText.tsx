@@ -19,6 +19,7 @@ export function PortableText({value, className}: PortableTextProps) {
           },
           marks: {
             strong: ({children}) => <strong>{children}</strong>,
+            em: ({children}) => <em>{children}</em>,
             link: ({children, value: link}) => (
               <a href={link?.href} target="_blank" rel="noopener noreferrer">
                 {children}

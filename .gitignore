@@ -11,3 +11,4 @@ dist
 schema.json
 *.tsbuildinfo
 .DS_Store
+.vercel

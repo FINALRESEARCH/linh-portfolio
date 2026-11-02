@@ -4,16 +4,18 @@ import {useCallback, useEffect, useRef, useState} from 'react'
 import Link from 'next/link'
 import type {PortfolioImage} from '@/sanity/types'
 import {SanityImage} from '@/components/SanityImage'
+import {useImageReveal} from '@/lib/useImageReveal'
 import {cn} from '@/lib/cn'
 
-const AUTOPLAY_DURATION_MS = 10000
+const AUTOPLAY_DURATION_MS = 5000
 
 const finePrint =
-  'text-[0.7rem] leading-[0.9rem] tracking-[-0.005rem] max-md:text-[0.6rem] max-md:leading-[0.7rem]'
+  'text-[0.7rem] leading-[0.9rem] tracking-[-0.005rem] mobile:text-[0.6rem] mobile:leading-[0.7rem]'
 
 type ProjectSlide = {
   _id: string
   title: string
+  homeTitle?: string
   slug: string
   coverImage: PortfolioImage
 }
@@ -26,9 +28,10 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const autoplayIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const lockRef = useRef(false)
+  const {isRevealed, onImageLoad} = useImageReveal(activeIndex)
   const total = projects.length
-  const active = projects[activeIndex]
+  const isFirst = activeIndex === 0
+  const isLast = activeIndex === total - 1
 
   const updateProgressBar = useCallback(() => {
     const progressBar = progressBarRef.current
@@ -43,65 +46,45 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
     }, 10)
   }, [])
 
+  // Autoplay loops last → first; manual nav (arrows/keys) stops at the ends
+  // like the live Swiper (loop: false + disabled arrows).
   const goTo = useCallback(
-    (direction: 'next' | 'prev' | number) => {
-      if (!total || lockRef.current) return
-
-      lockRef.current = true
+    (direction: 'next' | 'prev', loop = false) => {
+      if (!total) return
       setActiveIndex((current) => {
-        if (typeof direction === 'number') {
-          return ((direction % total) + total) % total
+        if (direction === 'next') {
+          if (current < total - 1) return current + 1
+          return loop ? 0 : current
         }
-        return direction === 'next'
-          ? (current + 1) % total
-          : (current - 1 + total) % total
+        return current > 0 ? current - 1 : current
       })
-
-      window.setTimeout(() => {
-        lockRef.current = false
-      }, 250)
     },
     [total],
   )
 
-  const startAutoplay = useCallback(() => {
-    if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current)
-    autoplayIntervalRef.current = setInterval(() => goTo('next'), AUTOPLAY_DURATION_MS)
-  }, [goTo])
-
+  // Any slide change resets the progress bar and the 5s autoplay timer
   useEffect(() => {
     if (!total) return
     updateProgressBar()
-    startAutoplay()
+    autoplayIntervalRef.current = setInterval(() => goTo('next', true), AUTOPLAY_DURATION_MS)
     return () => {
       if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current)
     }
-  }, [total, activeIndex, updateProgressBar, startAutoplay])
+  }, [total, activeIndex, updateProgressBar, goTo])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowRight') {
-        goTo('next')
-        startAutoplay()
-      }
-      if (event.key === 'ArrowLeft') {
-        goTo('prev')
-        startAutoplay()
-      }
+      if (event.key === 'ArrowRight') goTo('next')
+      if (event.key === 'ArrowLeft') goTo('prev')
     }
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [goTo, startAutoplay])
+  }, [goTo])
 
-  const handleNavClick = (direction: 'next' | 'prev') => {
-    goTo(direction)
-    startAutoplay()
-  }
-
-  if (!projects.length || !active) {
+  if (!projects.length) {
     return (
-      <div className="images-wrapper flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end max-md:order-2 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start">
+      <div className="images-wrapper flex h-full w-[65dvw] max-w-[65dvw] shrink-0 flex-col items-center justify-end mobile:absolute mobile:inset-0 mobile:h-svh mobile:w-full mobile:max-w-full">
         <p className={finePrint}>No projects yet.</p>
       </div>
     )
@@ -109,65 +92,59 @@ export function ProjectSwiper({projects}: ProjectSwiperProps) {
 
   return (
     <>
-      <div
-        className={cn(
-          'images-wrapper is-home-carousel flex h-full min-h-0 w-[65dvw] max-w-[65dvw] flex-col items-center justify-center',
-          'max-md:order-2 max-md:relative max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
-        )}
-      >
+      <div className="images-wrapper is-home-carousel flex h-full w-[65dvw] max-w-[65dvw] shrink-0 flex-col items-center justify-end mobile:absolute mobile:inset-0 mobile:h-svh mobile:w-full mobile:max-w-full">
         {/*
-          Reference/webflow: image fills ~94% of column height (room for title
-          + chevrons). object-contain + center in the column.
+          Slides are stacked (Swiper fade, speed 0) so every cover preloads;
+          only the active one is visible. Desktop: image box top-left, 94% of
+          the column height, title in the 6% left underneath.
         */}
-        <div className="home-carousel-frame relative flex h-full min-h-0 w-full flex-1 flex-col items-center justify-center max-md:h-auto max-md:flex-none max-md:justify-center max-md:py-[clamp(2rem,6svh,4rem)]">
-          <Link href={`/projects/${active.slug}`} className="home-carousel-link">
-            <SanityImage
-              key={active._id}
-              image={active.coverImage}
-              alt={active.title}
-              className="home-carousel-image"
-              sizes="(max-width: 767px) 100vw, 65vw"
-              fill
-              priority
-              loading="eager"
-            />
-          </Link>
-          <div className={cn(finePrint, 'home-carousel-title max-md:hidden')}>
-            {active.title}
-          </div>
+        <div className="swiper relative h-full w-full overflow-hidden">
+          {projects.map((project, index) => {
+            const label = project.homeTitle || project.title
+            const isActive = index === activeIndex
+
+            return (
+              <div
+                key={project._id}
+                className={cn('swiper-slide', isActive && 'is-active')}
+                aria-hidden={!isActive}
+              >
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className={cn('swiper-image-link', isRevealed(index) && 'loaded')}
+                  tabIndex={isActive ? undefined : -1}
+                >
+                  <SanityImage
+                    image={project.coverImage}
+                    alt={label}
+                    className="swiper-slide-image"
+                    sizes="(max-width: 479px) 100vw, 65vw"
+                    priority={index === 0}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    onLoad={() => onImageLoad(index)}
+                  />
+                </Link>
+                <div className={cn(finePrint, 'swiper-slide-title')}>{label}</div>
+              </div>
+            )
+          })}
         </div>
 
-        <button
-          type="button"
-          className="swiper-button-prev swiper-arrow fixed right-[30px] bottom-2.5 z-[50] hidden h-[22px] w-7 bg-[length:16px_16px] md:block"
-          aria-label="Previous project"
-          onClick={() => handleNavClick('prev')}
-        />
-        <button
-          type="button"
-          className="swiper-button-next swiper-arrow fixed right-0.5 bottom-2.5 z-[50] hidden h-[22px] w-7 bg-[length:16px_16px] md:block"
-          aria-label="Next project"
-          onClick={() => handleNavClick('next')}
-        />
-
-        <div className="swiper-mobile-footer hidden w-full items-center justify-between gap-4 px-2 max-md:flex">
-          <div className={cn(finePrint, 'swiper-mobile-title min-w-0 flex-1')}>
-            {active.title}
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              className="swiper-button-prev swiper-arrow h-[22px] w-7 bg-[length:16px_16px]"
-              aria-label="Previous project"
-              onClick={() => handleNavClick('prev')}
-            />
-            <button
-              type="button"
-              className="swiper-button-next swiper-arrow h-[22px] w-7 bg-[length:16px_16px]"
-              aria-label="Next project"
-              onClick={() => handleNavClick('next')}
-            />
-          </div>
+        <div className="swiper-navigation">
+          <button
+            type="button"
+            className={cn('swiper-button-prev swiper-arrow', isFirst && 'swiper-button-disabled')}
+            aria-label="Previous project"
+            disabled={isFirst}
+            onClick={() => goTo('prev')}
+          />
+          <button
+            type="button"
+            className={cn('swiper-button-next swiper-arrow', isLast && 'swiper-button-disabled')}
+            aria-label="Next project"
+            disabled={isLast}
+            onClick={() => goTo('next')}
+          />
         </div>
       </div>
       <div className="fixed inset-x-0 top-0 z-[9999] h-0.5 overflow-hidden">

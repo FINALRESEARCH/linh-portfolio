@@ -1,9 +1,9 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
-import {SidebarNav} from '@/components/SidebarNav'
+import {MobileProjectDescription, SidebarNav} from '@/components/SidebarNav'
 import {ProjectDetailSwiper} from '@/components/ProjectDetailSwiper'
 import {getProjectBySlug, getProjects, getProjectSlugs, getSiteSettings} from '@/lib/data'
-import {getMetadataBase, resolveLinkPreview} from '@/lib/seo'
+import {getMetadataBase, getSiteTitle, resolveLinkPreview} from '@/lib/seo'
 
 type PageProps = {
   params: Promise<{slug: string}>
@@ -23,27 +23,31 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   }
 
   const settings = await getSiteSettings()
-  const siteName = settings?.name || 'LINH THỊ NGUYỄN'
   const metadataBase = getMetadataBase()
+  // Title goes through the layout's `%s / SITE` template; og/twitter need it spelled out
+  const pageTitle = project.linkPreview?.title?.trim() || project.title.trim()
+  const fullTitle = `${pageTitle} / ${getSiteTitle(settings)}`
+  // Live has no per-project meta description; only override when one is set
+  const description = project.linkPreview?.description?.trim()
   const preview = resolveLinkPreview({
     linkPreview: project.linkPreview,
-    fallbackTitle: project.title,
-    fallbackDescription: `${project.title} — ${siteName}`,
+    fallbackTitle: fullTitle,
+    fallbackDescription: settings?.linkPreview?.description?.trim() || settings?.tagline || 'STYLIST',
     fallbackImage: project.coverImage ?? settings?.linkPreview?.image,
     metadataBase,
   })
 
   return {
-    title: preview.title,
-    description: preview.description,
+    title: pageTitle,
+    ...(description ? {description} : {}),
     openGraph: {
-      title: preview.title,
+      title: fullTitle,
       description: preview.description,
       images: [preview.image],
     },
     twitter: {
       card: 'summary_large_image',
-      title: preview.title,
+      title: fullTitle,
       description: preview.description,
       images: [preview.image],
     },
@@ -61,19 +65,18 @@ export default async function ProjectPage({params}: PageProps) {
   if (!project) notFound()
 
   return (
-    <div className="relative flex h-svh justify-between pt-3 pr-2.5 pb-2.5 pl-2.5 max-md:min-h-svh max-md:flex-col max-md:items-stretch max-md:justify-start max-md:gap-0 max-md:p-0">
-      <SidebarNav
-        settings={settings}
-        projects={projects}
-        variant="project"
-        currentSlug={slug}
-        description={project.description}
-      />
-      <ProjectDetailSwiper
-        images={project.gallery ?? []}
-        title={project.title}
-        description={project.description}
-      />
-    </div>
+    <>
+      <MobileProjectDescription description={project.description} />
+      <div className="outer-wrapper relative flex h-svh justify-between pt-3 pr-2.5 pb-2.5 pl-2.5 mobile:h-auto mobile:flex-col-reverse mobile:justify-end mobile:p-2 mobile:pt-0">
+        <SidebarNav
+          settings={settings}
+          projects={projects}
+          variant="project"
+          currentSlug={slug}
+          description={project.description}
+        />
+        <ProjectDetailSwiper images={project.gallery ?? []} title={project.title} />
+      </div>
+    </>
   )
 }

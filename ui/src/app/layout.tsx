@@ -3,17 +3,17 @@ import {draftMode} from 'next/headers'
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {SanityLive} from '@/sanity/live'
 import {getSiteSettings} from '@/lib/data'
-import {getMetadataBase, resolveLinkPreview, resolveSiteIcons} from '@/lib/seo'
+import {getMetadataBase, getSiteTitle, resolveLinkPreview, resolveSiteIcons} from '@/lib/seo'
 import './globals.css'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
   const metadataBase = getMetadataBase()
-  const siteName = settings?.name || 'LINH THỊ NGUYỄN'
+  const siteTitle = getSiteTitle(settings)
   const siteTagline = settings?.tagline || 'STYLIST'
   const preview = resolveLinkPreview({
     linkPreview: settings?.linkPreview,
-    fallbackTitle: siteName,
+    fallbackTitle: siteTitle,
     fallbackDescription: siteTagline,
     metadataBase,
   })
@@ -22,8 +22,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase,
     title: {
-      default: siteName,
-      template: `%s | ${siteName}`,
+      default: siteTitle,
+      template: `%s / ${siteTitle}`,
     },
     description: preview.description,
     icons: {
@@ -56,7 +56,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         {children}
-        <div className="balinhciaga pointer-events-none fixed inset-0 z-[999] hidden h-svh w-svw bg-[url('/images/BALINHCIAGA_WATERMARK_DESKTOP.svg')] bg-cover bg-center bg-no-repeat max-md:h-screen max-md:bg-[url('/images/BALINHCIAGA_WATERMARK_MOBILE.svg')]" />
+        <div className="balinhciaga pointer-events-none fixed inset-0 z-[999] hidden h-svh w-svw bg-[url('/images/BALINHCIAGA_WATERMARK_DESKTOP.svg')] bg-cover bg-center bg-no-repeat mobile:h-screen mobile:bg-[url('/images/BALINHCIAGA_WATERMARK_MOBILE.svg')]" />
         <SanityLive onReconnect={false} />
         {isDraftMode ? <VisualEditing /> : null}
       </body>

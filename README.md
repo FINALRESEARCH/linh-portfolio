@@ -34,7 +34,7 @@ If Sanity env vars are missing (or the CMS returns no projects), the UI falls ba
 ### `cms/.env.local`
 
 ```bash
-SANITY_STUDIO_PROJECT_ID=your-project-id
+SANITY_STUDIO_PROJECT_ID=o97pp4zy
 SANITY_STUDIO_DATASET=production
 SANITY_STUDIO_PREVIEW_ORIGIN=http://localhost:3000
 ```
@@ -42,7 +42,7 @@ SANITY_STUDIO_PREVIEW_ORIGIN=http://localhost:3000
 ### `ui/.env.local`
 
 ```bash
-NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
+NEXT_PUBLIC_SANITY_PROJECT_ID=o97pp4zy
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2026-02-01
 NEXT_PUBLIC_SANITY_STUDIO_URL=http://localhost:3333

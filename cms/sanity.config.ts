@@ -5,11 +5,13 @@ import {presentationTool} from 'sanity/presentation'
 import {schemaTypes} from './schemaTypes'
 import {structure} from './structure'
 import {resolve} from './presentation/resolve'
+import {studioTheme} from './sanity/studioTheme'
+import './sanity/studioStyles.css'
 
 export default defineConfig({
   name: 'default',
   title: 'Linh Portfolio',
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'o97pp4zy',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   plugins: [
     structureTool({structure}),
@@ -26,5 +28,11 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
+  },
+  theme: studioTheme,
+  studio: {
+    components: {
+      logo: () => null,
+    },
   },
 })

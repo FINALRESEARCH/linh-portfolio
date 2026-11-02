@@ -32,24 +32,6 @@ export const siteSettings = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'copyrightYear',
-      title: 'Copyright Year',
-      type: 'number',
-      validation: (rule) => rule.required().integer().min(2000).max(2100),
-    }),
-    defineField({
-      name: 'creditName',
-      title: 'Credit Name',
-      type: 'string',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'creditUrl',
-      title: 'Credit URL',
-      type: 'url',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
       name: 'linkPreview',
       title: 'Link Preview',
       type: 'linkPreview',

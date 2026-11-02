@@ -28,6 +28,12 @@ export const project = defineType({
       validation: (rule) => rule.required().integer().min(0),
     }),
     defineField({
+      name: 'homeTitle',
+      title: 'Home Caption',
+      type: 'string',
+      description: 'Caption under the cover image in the home carousel. Falls back to the title.',
+    }),
+    defineField({
       name: 'coverImage',
       title: 'Cover Image',
       type: 'image',
@@ -50,7 +56,10 @@ export const project = defineType({
           type: 'block',
           styles: [{title: 'Normal', value: 'normal'}],
           marks: {
-            decorators: [{title: 'Bold', value: 'strong'}],
+            decorators: [
+              {title: 'Bold', value: 'strong'},
+              {title: 'Italic', value: 'em'},
+            ],
             annotations: [
               {
                 name: 'link',

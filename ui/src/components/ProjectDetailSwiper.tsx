@@ -1,44 +1,32 @@
 'use client'
 
-import {useCallback, useEffect, useRef, useState} from 'react'
-import type {PortableTextBlock} from '@portabletext/types'
+import {useCallback, useEffect, useState} from 'react'
 import type {PortfolioImage} from '@/sanity/types'
 import {SanityImage} from '@/components/SanityImage'
 import {CustomCursor} from '@/components/CustomCursor'
-import {PortableText} from '@/components/PortableText'
+import {useImageReveal} from '@/lib/useImageReveal'
 import {cn} from '@/lib/cn'
 
 const finePrint =
-  'text-[0.7rem] leading-[0.9rem] tracking-[-0.005rem] max-md:text-[0.6rem] max-md:leading-[0.7rem]'
+  'text-[0.7rem] leading-[0.9rem] tracking-[-0.005rem] mobile:text-[0.6rem] mobile:leading-[0.7rem]'
 
 type ProjectDetailSwiperProps = {
   images: PortfolioImage[]
   title: string
-  description?: PortableTextBlock[]
 }
 
-export function ProjectDetailSwiper({
-  images,
-  title,
-  description,
-}: ProjectDetailSwiperProps) {
+export function ProjectDetailSwiper({images, title}: ProjectDetailSwiperProps) {
   const [activeIndex, setActiveIndex] = useState(0)
-  const lockRef = useRef(false)
+  const {isRevealed, onImageLoad} = useImageReveal(activeIndex)
   const total = images.length
-  const activeImage = images[activeIndex]
 
+  // Gallery loops in both directions (live Swiper loop: true)
   const goTo = useCallback(
     (direction: 'next' | 'prev') => {
-      if (!total || lockRef.current) return
-
-      lockRef.current = true
+      if (!total) return
       setActiveIndex((current) =>
         direction === 'next' ? (current + 1) % total : (current - 1 + total) % total,
       )
-
-      window.setTimeout(() => {
-        lockRef.current = false
-      }, 250)
     },
     [total],
   )
@@ -53,14 +41,9 @@ export function ProjectDetailSwiper({
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [goTo])
 
-  if (!images.length || !activeImage) {
+  if (!images.length) {
     return (
-      <div
-        className={cn(
-          'images-wrapper is-project-gallery flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end',
-          'max-md:order-1 max-md:relative max-md:mt-0 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
-        )}
-      >
+      <div className="images-wrapper is-project-gallery flex h-full w-[65dvw] max-w-[65dvw] shrink-0 flex-col items-center justify-end mobile:absolute mobile:inset-0 mobile:h-svh mobile:w-full mobile:max-w-full">
         <p className={finePrint}>No gallery images.</p>
       </div>
     )
@@ -69,75 +52,69 @@ export function ProjectDetailSwiper({
   return (
     <>
       <CustomCursor currentIndex={activeIndex} totalImages={total} />
-      <div
-        className={cn(
-          'images-wrapper is-project-gallery relative flex h-full w-[65dvw] max-w-[65dvw] flex-col items-center justify-end max-lg:cursor-auto lg:cursor-none',
-          'max-md:order-1 max-md:mt-0 max-md:h-auto max-md:min-h-0 max-md:w-full max-md:max-w-full max-md:flex-none max-md:items-stretch max-md:justify-start',
-        )}
-      >
-        <div className="relative flex min-h-0 w-full flex-1 items-center justify-start max-md:flex-none max-md:items-start max-md:justify-center">
-          {/*
-            Non-fill + flex-start so portrait images sit on the left of the
-            column (fill + object-position was losing to default 50% 50%).
-          */}
-          <div className="project-gallery-frame relative flex w-full items-center justify-start max-md:justify-center">
-            <SanityImage
-              image={activeImage}
-              alt={`${title} — image ${activeIndex + 1}`}
-              className="project-gallery-image"
-              sizes="(max-width: 767px) 100vw, 65vw"
-              priority
-              loading="eager"
-            />
+      <div className="images-wrapper is-project-gallery flex h-full w-[65dvw] max-w-[65dvw] shrink-0 flex-col items-center justify-end mobile:absolute mobile:inset-0 mobile:h-svh mobile:w-full mobile:max-w-full">
+        {/*
+          Stacked slides (Swiper fade, speed 0) so the whole gallery preloads.
+          Desktop: image box top-left at 94% column height. Mobile: full-width
+          image pinned to the top of the first screen.
+        */}
+        <div className="swiper relative h-full w-full overflow-hidden">
+          {images.map((image, index) => {
+            const isActive = index === activeIndex
 
-            {/*
-              Full-frame click advances next in order (1→2→3…).
-              Left/right prev/next halves made left-side clicks jump
-              backward, so the cursor counter felt broken there.
-              Explicit prev/next stays on the chevrons.
-            */}
-            <button
-              type="button"
-              className="absolute inset-x-0 top-0 bottom-12 z-[1] hidden w-full cursor-none appearance-none border-0 bg-transparent p-0 md:block"
-              aria-label="Next image"
-              onClick={() => goTo('next')}
-            />
-          </div>
+            return (
+              <div
+                key={index}
+                className={cn('swiper-slide project', isActive && 'is-active')}
+                aria-hidden={!isActive}
+              >
+                <div className={cn('swiper-image-link project', isRevealed(index) && 'loaded')}>
+                  <SanityImage
+                    image={image}
+                    alt={`${title} — image ${index + 1}`}
+                    className="swiper-slide-image"
+                    sizes="(max-width: 479px) 100vw, 65vw"
+                    priority={index === 0}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    onLoad={() => onImageLoad(index)}
+                  />
+
+                  {/* Click halves over the image box only: left = prev, right = next */}
+                  <div className="swiper-project-image-nav">
+                    <button
+                      type="button"
+                      className="swiper-project-image-nav-prev"
+                      aria-label="Previous image"
+                      tabIndex={-1}
+                      onClick={() => goTo('prev')}
+                    />
+                    <button
+                      type="button"
+                      className="swiper-project-image-nav-next"
+                      aria-label="Next image"
+                      tabIndex={-1}
+                      onClick={() => goTo('next')}
+                    />
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
 
-        <button
-          type="button"
-          className="swiper-button-prev swiper-arrow fixed right-[30px] bottom-2.5 z-[50] hidden h-[22px] w-7 bg-[length:16px_16px] md:block"
-          aria-label="Previous image"
-          onClick={() => goTo('prev')}
-        />
-        <button
-          type="button"
-          className="swiper-button-next swiper-arrow fixed right-0.5 bottom-2.5 z-[50] hidden h-[22px] w-7 bg-[length:16px_16px] md:block"
-          aria-label="Next image"
-          onClick={() => goTo('next')}
-        />
-
-        <div className="flex w-full items-end justify-between gap-4 px-2 pt-12 md:hidden">
-          <div className="min-w-0 flex-1">
-            {description?.length ? (
-              <PortableText value={description} className={cn(finePrint, 'richtext')} />
-            ) : null}
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              className="swiper-button-prev swiper-arrow h-[22px] w-7 bg-[length:16px_16px]"
-              aria-label="Previous image"
-              onClick={() => goTo('prev')}
-            />
-            <button
-              type="button"
-              className="swiper-button-next swiper-arrow h-[22px] w-7 bg-[length:16px_16px]"
-              aria-label="Next image"
-              onClick={() => goTo('next')}
-            />
-          </div>
+        <div className="swiper-navigation">
+          <button
+            type="button"
+            className="swiper-button-prev swiper-arrow"
+            aria-label="Previous image"
+            onClick={() => goTo('prev')}
+          />
+          <button
+            type="button"
+            className="swiper-button-next swiper-arrow"
+            aria-label="Next image"
+            onClick={() => goTo('next')}
+          />
         </div>
       </div>
     </>

@@ -16,9 +16,6 @@ export type SiteSettings = {
   tagline: string
   email: string
   instagramUrl: string
-  copyrightYear: number
-  creditName: string
-  creditUrl: string
   linkPreview?: LinkPreview
   siteIcons?: SiteIcons
 }
@@ -28,6 +25,7 @@ export type ProjectListItem = {
   title: string
   slug: string
   order: number
+  homeTitle?: string
   coverImage: PortfolioImage
 }
 

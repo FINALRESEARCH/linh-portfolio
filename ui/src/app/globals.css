@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Webflow's only layout breakpoint: <=479px is the phone layout, 480+ is desktop */
+@custom-variant mobile (@media screen and (max-width: 479px));
+
 @font-face {
   font-family: BALINHCIAGA-PRO;
   src: url('/fonts/SF-Pro-Text-Medium.otf') format('opentype');
@@ -29,7 +32,7 @@
   }
 
   body {
-    @apply bg-background font-sans text-foreground antialiased uppercase;
+    @apply bg-background font-sans font-medium text-foreground antialiased uppercase;
     letter-spacing: -0.015rem;
     font-size: 0.95rem;
     line-height: 1.15rem;
@@ -53,7 +56,7 @@
     opacity: 0.3;
   }
 
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 479px) {
     body {
       font-size: 0.8rem;
       line-height: 0.9rem;
@@ -62,41 +65,58 @@
 }
 
 @layer components {
-  .swiper-slide-image {
-    pointer-events: none;
-    object-fit: contain;
-    width: auto;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-  }
-
+  /*
+   * Slides: stacked like Swiper's fade effect at speed 0 — every image
+   * preloads, only `.is-active` shows. Swiper's own `display: block` beats
+   * Webflow's flex on live, so desktop images sit top-left in the slide.
+   */
   .swiper-slide {
-    @apply relative flex h-full w-auto flex-col items-end justify-center self-center overflow-hidden;
+    position: absolute;
+    inset: 0;
+    display: block;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
   }
 
-  .swiper-wrapper {
-    @apply flex h-full;
+  .swiper-slide.is-active {
+    z-index: 1;
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  .swiper {
-    @apply h-full overflow-hidden;
-  }
-
-  .swiper.swiper-projects {
-    @apply w-full;
-  }
-
+  /* Image box: 94% of the column height, room below for title + arrows */
   .swiper-image-link {
-    @apply inline-flex h-full max-h-[94%] max-w-full items-center justify-end bg-contain bg-center bg-no-repeat;
-    object-fit: contain;
-    object-position: 100% 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    max-height: 94%;
+    max-width: 100%;
   }
 
   .swiper-image-link:hover {
     opacity: 1;
   }
 
+  .swiper-image-link.project {
+    position: relative;
+  }
+
+  .swiper-slide-image {
+    pointer-events: none;
+    object-fit: contain;
+    width: auto;
+    height: 100%;
+    min-width: 0;
+    max-width: 100%;
+    vertical-align: middle;
+  }
+
+  /* Live `.loaded` reveal: hidden until ~350ms after load, 50ms fade */
   .swiper-image-link > img {
     visibility: hidden;
     opacity: 0;
@@ -108,161 +128,61 @@
     opacity: 1;
   }
 
-  /* Project gallery controls visibility via parent opacity, not .loaded */
-  .images-wrapper.is-project-gallery .swiper-image-link > img,
-  .images-wrapper.is-project-gallery .project-gallery-image {
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
-  /*
-   * Home carousel: mirrors reference/webflow slide layout.
-   * Image fills 94% of column height (space left for title + chevrons).
-   * object-contain + center: full height when it fits; centered in the
-   * column when too wide (or letterboxed) to fill the frame.
-   */
-  .images-wrapper.is-home-carousel .home-carousel-frame {
-    min-height: 0;
-    overflow: hidden;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .images-wrapper.is-home-carousel .home-carousel-link {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 94%;
-    max-height: 94%;
-    max-width: 100%;
-  }
-
-  .images-wrapper.is-home-carousel .home-carousel-link:hover {
-    opacity: 1;
-  }
-
-  .images-wrapper.is-home-carousel .home-carousel-image {
-    object-fit: contain !important;
-    object-position: center center !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
-  .images-wrapper.is-home-carousel .home-carousel-title {
+  .swiper-slide-title {
     position: absolute;
-    inset: auto 0% 0%;
-    margin-bottom: 0;
+    inset: auto 0 0;
     display: inline-flex;
-    font-family: var(--font-sans);
-  }
-
-  /* Legacy Swiper home rules kept for safety if markup is restored */
-  .images-wrapper.is-home-carousel .swiper,
-  .images-wrapper.is-home-carousel .swiper-wrapper {
-    width: 100%;
-    height: 100%;
-  }
-
-  .images-wrapper.is-home-carousel .swiper-wrapper {
-    display: grid !important;
-    align-items: stretch;
-    justify-items: stretch;
-  }
-
-  .images-wrapper.is-home-carousel .swiper-slide {
-    grid-area: 1 / 1;
-    position: relative !important;
-    inset: auto !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none;
-    max-height: none;
-    align-self: stretch;
-    justify-self: stretch;
-    display: flex !important;
-    flex-flow: column;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0;
     margin: 0;
-    overflow: hidden;
-    opacity: 1 !important;
   }
 
-  .images-wrapper.is-home-carousel .swiper-slide:not(.swiper-slide-active) {
-    visibility: hidden;
-    z-index: 0;
-    pointer-events: none;
+  /* Project gallery click halves, sized to the image box */
+  .swiper-project-image-nav {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-between;
   }
 
-  .images-wrapper.is-home-carousel .swiper-slide-active {
-    visibility: visible;
+  .swiper-project-image-nav-prev,
+  .swiper-project-image-nav-next {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+    cursor: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Custom cursor only runs at >=1024px (see CustomCursor) */
+  @media screen and (min-width: 1024px) {
+    .swiper-image-link.project {
+      cursor: none;
+    }
+  }
+
+  .swiper-navigation {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
     z-index: 1;
-  }
-
-  .images-wrapper.is-home-carousel .swiper-image-link {
-    width: auto;
-    max-width: 100%;
-    height: 100%;
-    max-height: 94%;
-    margin: 0;
-    padding: 0;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    gap: 0.5rem;
   }
 
-  .images-wrapper.is-home-carousel .swiper-slide-image {
-    width: auto !important;
-    height: auto !important;
-    max-width: 100% !important;
-    max-height: min(94%, calc(100svh - 3rem)) !important;
-    margin: 0 !important;
-    object-fit: contain;
-    object-position: right center;
-  }
-
-  .images-wrapper.is-home-carousel .swiper-slide-title {
-    position: absolute;
-    inset: auto auto 0 0;
-    margin: 0;
-    display: inline-flex;
-    white-space: nowrap;
-  }
-
-  .images-wrapper.is-home-carousel .swiper-slide:not(.swiper-slide-active) .swiper-slide-title {
-    visibility: hidden;
-    opacity: 0;
-  }
-
-  /* Project gallery: height-driven image, left-aligned in the desktop column */
-  .images-wrapper.is-project-gallery .project-gallery-frame {
-    position: relative;
-    height: 94%;
-    max-height: 94%;
-    width: 100%;
-    min-height: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .images-wrapper.is-project-gallery .project-gallery-image {
-    position: static !important;
-    inset: auto !important;
-    display: block;
-    width: auto !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    object-position: left center !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
+  /* Desktop arrows are fixed to the viewport corner */
   .swiper-arrow {
-    @apply m-0 h-4 w-4 cursor-pointer border-0 bg-transparent bg-contain bg-center bg-no-repeat p-0;
+    @apply m-0 cursor-pointer border-0 bg-transparent bg-center bg-no-repeat p-0;
+    position: fixed;
+    bottom: 10px;
+    z-index: 10;
+    width: 28px;
+    height: 22px;
+    background-size: 16px 16px;
     color: inherit;
     font: inherit;
     line-height: 1;
@@ -271,21 +191,20 @@
   }
 
   .swiper-arrow.swiper-button-prev {
+    right: 30px;
     background-image: url('/images/CHEVRON-LEFT.svg');
   }
 
   .swiper-arrow.swiper-button-next {
+    right: 2px;
     background-image: url('/images/CHEVRON-RIGHT.svg');
   }
 
-  .swiper-arrow:hover {
-    opacity: 0.3;
-  }
-
-  .swiper-button-next::after,
-  .swiper-button-prev::after {
-    content: none;
-    display: none;
+  /* Gated so a tap doesn't leave the arrow stuck at hover opacity */
+  @media (hover: hover) {
+    .swiper-arrow:hover {
+      opacity: 0.3;
+    }
   }
 
   .swiper-progress-bar-fill {
@@ -294,145 +213,101 @@
     transition: width 0.8s;
   }
 
-  /*
-   * Project credits are often one line per Portable Text block.
-   * Don't add paragraph margins — fine-print line-height (0.9rem) should
-   * stack the lines tightly (matches Webflow richtext credits).
-   */
+  /* Webflow default paragraph spacing inside rich text */
   .richtext p {
-    margin: 0;
-    line-height: inherit;
+    margin: 0 0 10px;
   }
 
-  @media screen and (max-width: 767px) {
-    .swiper,
-    .images-wrapper .swiper.swiper-projects {
-      @apply h-auto min-h-0;
-    }
-
+  /* Webflow head-embed override: slides go flex again at <=480px */
+  @media screen and (max-width: 480px) {
     .swiper-slide {
-      @apply !flex h-auto min-h-0 w-full flex-col items-stretch justify-start;
+      display: flex !important;
     }
+  }
 
-    .swiper-wrapper {
-      @apply h-auto min-h-0 items-stretch;
+  @media screen and (max-width: 479px) {
+    .swiper-slide.project {
+      align-items: center;
+      justify-content: flex-start;
     }
 
     .swiper-image-link {
-      @apply inline-flex h-auto w-full max-h-none flex-none items-center justify-center;
+      width: 100%;
+      height: auto;
+    }
+
+    .swiper-image-link.project {
+      align-items: flex-start;
+      justify-content: center;
+      max-height: 100%;
     }
 
     .swiper-slide-image {
-      @apply h-auto max-h-[70svh] w-full max-w-full align-middle;
-    }
-
-    .images-wrapper.is-home-carousel .home-carousel-frame {
-      overflow: visible;
-    }
-
-    .images-wrapper.is-home-carousel .home-carousel-link {
       width: 100%;
-      height: 70svh;
-      max-height: 70svh;
-    }
-
-    .images-wrapper.is-home-carousel .home-carousel-image {
-      object-position: center center !important;
-    }
-
-    .images-wrapper.is-home-carousel .home-carousel-title {
-      display: none !important;
-    }
-
-    .images-wrapper.is-home-carousel .swiper,
-    .images-wrapper.is-home-carousel .swiper-wrapper {
       height: auto;
-      width: 100%;
     }
 
-    .images-wrapper.is-home-carousel .swiper-wrapper {
-      justify-items: center;
+    .swiper-slide-title {
+      bottom: 8px;
+      left: 8px;
+      width: 85%;
     }
 
-    .images-wrapper.is-home-carousel .swiper-slide {
-      @apply !flex w-full items-center justify-center;
-      height: auto !important;
-      max-width: 100%;
-      align-items: center !important;
-      justify-self: center;
+    .swiper-navigation {
+      right: 0;
+      bottom: 5px;
+      gap: 0;
     }
 
-    .images-wrapper.is-home-carousel .swiper-image-link {
-      @apply w-auto max-w-full items-center justify-center;
-      height: auto;
-      max-height: none;
-      justify-content: center;
+    .swiper-arrow {
+      position: static;
     }
 
-    .images-wrapper.is-home-carousel .swiper-slide-image {
-      width: auto !important;
-      height: auto !important;
-      max-width: 100% !important;
-      max-height: 70svh !important;
-      object-position: center;
+    .swiper-arrow:focus {
+      opacity: 1;
     }
+  }
 
-    /* Beat the desktop display:inline-flex rule so only the footer title shows */
-    .images-wrapper.is-home-carousel .swiper-slide-title {
-      display: none !important;
-    }
-
-    .images-wrapper.is-project-gallery .project-gallery-frame {
-      width: 100%;
-      height: auto !important;
-      max-height: none;
-      min-height: 0;
-      justify-content: center;
-      align-items: flex-start;
-    }
-
-    /* Project pages only: full-width, top of the mobile stack */
-    .images-wrapper.is-project-gallery .project-gallery-image {
-      width: 100% !important;
-      height: auto !important;
-      max-width: 100% !important;
-      max-height: 70svh !important;
-      object-fit: contain !important;
-      object-position: center top !important;
-    }
+  /* Swiper `.swiper-button-disabled` (home: first/last slide) */
+  .swiper-arrow.swiper-button-disabled {
+    opacity: 0.35;
+    cursor: auto;
+    pointer-events: none;
   }
 }
 
-/*
- * Unlayered so these beat Swiper's own stylesheet (also unlayered).
- * Keeps home fade slides stacked instead of sitting side-by-side.
- */
-.images-wrapper.is-home-carousel .swiper-wrapper {
-  display: grid !important;
+/* FINAL RESEARCH credit — sized by the fine-print class it's rendered with. */
+:root {
+  --color-text: #333;
 }
 
-.images-wrapper.is-home-carousel .swiper-slide {
-  opacity: 1 !important;
+.final-research-credit a {
+  position: relative;
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-/* Desktop project gallery: force portrait/narrow images to the left edge */
-@media screen and (min-width: 768px) {
-  .images-wrapper.is-project-gallery .project-gallery-frame {
-    justify-content: flex-start !important;
-  }
-
-  .images-wrapper.is-project-gallery .project-gallery-image {
-    margin-right: auto;
-    object-position: left center !important;
-  }
+.final-research-default {
+  display: inline-block;
+  visibility: visible;
 }
 
-.swiper-project-image-nav-prev,
-.swiper-project-image-nav-next {
-  -webkit-appearance: none;
-  appearance: none;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  outline: none;
+.final-research-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+.final-research-credit a:hover .final-research-hover {
+  opacity: 1;
+  visibility: visible;
+}
+
+.final-research-credit a:hover .final-research-default {
+  visibility: hidden;
 }

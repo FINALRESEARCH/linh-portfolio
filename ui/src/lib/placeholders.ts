@@ -21,9 +21,6 @@ export const PLACEHOLDER_SITE_SETTINGS: SiteSettings = {
   tagline: 'Styling & Creative direction',
   email: 'l.tn@outlook.com',
   instagramUrl: 'http://instagram.com/liemgiaycuatoi/',
-  copyrightYear: 2024,
-  creditName: 'LEFT',
-  creditUrl: 'https://left.systems',
 }
 
 export const PLACEHOLDER_PROJECTS: ProjectDetail[] = [

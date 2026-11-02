@@ -6,9 +6,6 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     tagline,
     email,
     instagramUrl,
-    copyrightYear,
-    creditName,
-    creditUrl,
     linkPreview {
       title,
       description,
@@ -27,6 +24,7 @@ export const PROJECTS_LIST_QUERY = defineQuery(`
     title,
     "slug": slug.current,
     order,
+    homeTitle,
     coverImage{
       ...,
       asset->{
@@ -49,6 +47,7 @@ export const PROJECT_BY_SLUG_QUERY = defineQuery(`
     title,
     "slug": slug.current,
     order,
+    homeTitle,
     coverImage{
       ...,
       asset->{

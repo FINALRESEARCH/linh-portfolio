@@ -17,6 +17,13 @@ export type SiteIcons = {
   appleTouchIcon?: SanityImageSource
 }
 
+/** Site title used in <title> / og — the link preview title ("LINH THI NGUYEN") wins over the display name */
+export function getSiteTitle(
+  settings?: {name?: string; linkPreview?: LinkPreview | null} | null,
+): string {
+  return settings?.linkPreview?.title?.trim() || settings?.name?.trim() || 'LINH THI NGUYEN'
+}
+
 export function getMetadataBase(): URL {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
     return new URL(process.env.NEXT_PUBLIC_SITE_URL)

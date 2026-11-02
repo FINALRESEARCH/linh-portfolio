@@ -13,6 +13,8 @@ type SanityImageProps = {
   sizes?: string
   /** Fill a positioned parent — used for full-height gallery frames */
   fill?: boolean
+  /** Fires once the image has loaded (including from cache) */
+  onLoad?: () => void
 }
 
 type AssetRefImage = {
@@ -36,8 +38,9 @@ export function SanityImage({
   className,
   priority = false,
   loading,
-  sizes = '(max-width: 767px) 100vw, 65vw',
+  sizes = '(max-width: 479px) 100vw, 65vw',
   fill = false,
+  onLoad,
 }: SanityImageProps) {
   if (isLocalImage(image)) {
     if (fill) {
@@ -50,6 +53,7 @@ export function SanityImage({
           sizes={sizes}
           priority={priority}
           loading={loading}
+          onLoad={onLoad}
         />
       )
     }
@@ -64,6 +68,7 @@ export function SanityImage({
         sizes={sizes}
         priority={priority}
         loading={loading}
+        onLoad={onLoad}
       />
     )
   }
@@ -83,6 +88,7 @@ export function SanityImage({
         sizes={sizes}
         priority={priority}
         loading={loading}
+        onLoad={onLoad}
       />
     )
   }
@@ -97,6 +103,7 @@ export function SanityImage({
       sizes={sizes}
       priority={priority}
       loading={loading}
+      onLoad={onLoad}
     />
   )
 }
