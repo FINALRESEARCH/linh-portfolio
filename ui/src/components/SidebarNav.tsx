@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type {PortableTextBlock} from '@portabletext/types'
 import {NavProjectLink} from '@/components/NavProjectLink'
 import {PortableText} from '@/components/PortableText'
+import {CurrentYear} from '@/components/CurrentYear'
 import {FinalResearchCredit} from '@/components/FinalResearchCredit'
 import {cn} from '@/lib/cn'
 
@@ -33,7 +34,6 @@ export function SidebarNav({
   const tagline = settings?.tagline || 'Styling & Creative direction'
   const email = settings?.email || 'l.tn@outlook.com'
   const instagramUrl = settings?.instagramUrl || 'http://instagram.com/liemgiaycuatoi/'
-  const copyrightYear = new Date().getFullYear()
 
   const bio = (
     <div
@@ -79,7 +79,7 @@ export function SidebarNav({
 
   const copyright = (
     <div className={cn(navSection, 'mobile:order-5')}>
-      <div className={finePrint}>©{copyrightYear} Linh Nguyen</div>
+      <div className={finePrint}>©<CurrentYear /> Linh Nguyen</div>
       <FinalResearchCredit className={finePrint} />
     </div>
   )
