@@ -73,7 +73,6 @@ export default async function ProjectPage({params}: PageProps) {
           projects={projects}
           variant="project"
           currentSlug={slug}
-          description={project.description}
         />
         <ProjectDetailSwiper images={project.gallery ?? []} title={project.title} />
       </div>

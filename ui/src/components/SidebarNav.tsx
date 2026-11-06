@@ -19,7 +19,6 @@ type SidebarNavProps = {
   projects: ProjectListItem[]
   variant?: 'home' | 'project'
   currentSlug?: string
-  description?: PortableTextBlock[]
 }
 
 export function SidebarNav({
@@ -27,7 +26,6 @@ export function SidebarNav({
   projects,
   variant = 'home',
   currentSlug,
-  description,
 }: SidebarNavProps) {
   const isProject = variant === 'project'
   const name = settings?.name || 'LINH THỊ NGUYỄN'
@@ -85,35 +83,45 @@ export function SidebarNav({
   )
 
   /*
-   * Webflow `.nav-wrapper`: space-between column, 8rem gaps. Copyright sits
-   * in flow at the bottom, so short viewports grow/scroll instead of
-   * overlapping. Mobile (<=479): the nav starts below the full-screen image.
+   * Credits slot: every project's credits share one grid cell, so the slot is
+   * always as tall as the longest set. Only the current project's is visible,
+   * which keeps CONTACT and everything else fixed in place across home and
+   * every project page.
    */
-  const navWrapper =
-    'nav-wrapper flex min-w-[25dvw] flex-col items-start justify-between gap-32 pr-[5dvw] mobile:absolute mobile:top-[100svh] mobile:min-w-0 mobile:items-stretch mobile:pb-2'
-
-  if (isProject) {
-    return (
-      <div className={cn(navWrapper, 'mobile:gap-[6svh] mobile:pt-[6svh]')}>
-        {bio}
-        {index}
-        {description?.length ? (
-          <div className={cn(navSection, 'mobile:hidden')}>
-            <PortableText value={description} className={cn(finePrint, 'richtext')} />
+  const credits = (
+    <div className="mt-8 grid self-stretch mobile:hidden">
+      {projects.map((project) =>
+        project.description?.length ? (
+          <div
+            key={project._id}
+            className={cn('col-start-1 row-start-1', project.slug !== currentSlug && 'invisible')}
+            aria-hidden={project.slug !== currentSlug}
+          >
+            <PortableText value={project.description} className={cn(finePrint, 'richtext')} />
           </div>
-        ) : null}
-        {contact}
-        {copyright}
-      </div>
-    )
-  }
+        ) : null,
+      )}
+    </div>
+  )
 
+  /*
+   * One layout for home and project pages (Webflow `.nav-wrapper` spacing:
+   * 8rem below the bio, copyright in flow at the bottom so short viewports
+   * scroll instead of overlapping). Mobile (<=479): the nav starts below the
+   * full-screen image, and the group flattens so `order` can rearrange it.
+   */
   return (
-    <div className={cn(navWrapper, 'mobile:gap-24 mobile:pt-[4svh]')}>
-      <div className="flex flex-col items-start justify-start gap-32 mobile:items-stretch mobile:gap-24">
+    <div
+      className={cn(
+        'nav-wrapper flex min-w-[25dvw] flex-col items-start justify-between gap-8 pr-[5dvw] mobile:absolute mobile:top-[100svh] mobile:min-w-0 mobile:items-stretch mobile:pb-2',
+        isProject ? 'mobile:gap-[6svh] mobile:pt-[6svh]' : 'mobile:gap-24 mobile:pt-[4svh]',
+      )}
+    >
+      <div className="flex flex-col items-start mobile:contents">
         {bio}
-        {index}
-        {contact}
+        <div className="mt-32 mobile:mt-0 mobile:contents">{index}</div>
+        {credits}
+        <div className="mt-16 mobile:mt-0 mobile:contents">{contact}</div>
       </div>
       {copyright}
     </div>

@@ -27,11 +27,12 @@ export type ProjectListItem = {
   order: number
   homeTitle?: string
   coverImage: PortfolioImage
+  /** Credits — every page renders all of them to reserve the sidebar slot */
+  description?: PortableTextBlock[]
 }
 
 export type ProjectDetail = ProjectListItem & {
   gallery: PortfolioImage[]
-  description?: PortableTextBlock[]
   linkPreview?: LinkPreview
 }
 

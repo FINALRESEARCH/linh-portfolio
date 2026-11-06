@@ -31,7 +31,8 @@ export const PROJECTS_LIST_QUERY = defineQuery(`
         _id,
         metadata { dimensions { width, height } }
       }
-    }
+    },
+    description
   }
 `)
 

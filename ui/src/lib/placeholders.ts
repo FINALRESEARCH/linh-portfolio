@@ -59,7 +59,7 @@ export const PLACEHOLDER_PROJECTS: ProjectDetail[] = [
 ]
 
 export function getPlaceholderProjects(): ProjectListItem[] {
-  return PLACEHOLDER_PROJECTS.map(({gallery: _gallery, description: _description, ...project}) => project)
+  return PLACEHOLDER_PROJECTS.map(({gallery: _gallery, ...project}) => project)
 }
 
 export function getPlaceholderProjectBySlug(slug: string): ProjectDetail | null {
