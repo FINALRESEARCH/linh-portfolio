@@ -53,8 +53,9 @@ export function LinkPreviewInput(props: ObjectInputProps) {
             </Box>
             <Box padding={3}>
               <Stack space={2}>
-                <Text muted size={0} textTransform="uppercase">
-                  {process.env.SANITY_STUDIO_PREVIEW_ORIGIN || 'localhost:3000'}
+                <Text muted size={0} style={{textTransform: 'uppercase'}}>
+                  {process.env.SANITY_STUDIO_PREVIEW_ORIGIN ||
+                    (typeof window !== 'undefined' ? window.location.host : 'localhost:3000')}
                 </Text>
                 <Text size={1} weight="semibold">
                   {preview.title?.trim() || 'Page title will be used'}

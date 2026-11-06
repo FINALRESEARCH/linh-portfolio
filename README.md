@@ -7,7 +7,7 @@ Rebuild of the Linh Thị Nguyễn stylist portfolio — migrated from Webflow t
 ```
 linh-portfolio/
 ├── ui/               # Next.js frontend (localhost:3000)
-├── cms/              # Sanity Studio (localhost:3333)
+├── cms/              # Sanity schema + Studio config (standalone dev on localhost:3333)
 ├── reference/        # Non-runtime reference material
 │   └── webflow/      # Original Webflow HTML/CSS/JS export
 ├── turbo.json        # Turbo task pipeline
@@ -79,7 +79,7 @@ npm run typegen      # regenerate TypeScript types from schemas + GROQ queries
 
 ## Client content entry
 
-1. Open Studio (`npm run dev` then go to localhost:3333, or use deployed `*.sanity.studio` URL)
+1. Open Studio at `/studio` on the site (e.g. localhost:3000/studio, or the production domain + `/studio`)
 2. Edit **Site Settings** — name, tagline, contact, social, copyright, link preview, site icons
 3. Create **Projects** — for each project:
    - Title, slug, order (sort position)
@@ -108,14 +108,16 @@ When `SANITY_API_READ_TOKEN` is set:
 - Add all `ui/.env.local` variables in Vercel project settings
 - Set `NEXT_PUBLIC_SITE_URL` to your production domain (e.g. `https://your-app.vercel.app`)
 
-### Sanity Studio (`cms`)
+### Sanity Studio
+
+The Studio is embedded in the site at `/studio` (`ui/src/app/(studio)`), so it deploys with the site — no separate `sanity deploy`. Schema and config live in `cms/` (`cms/studio-config.ts` is shared by the embedded and standalone Studios).
+
+Add each site origin to Sanity CORS **with credentials** so Studio login works:
 
 ```bash
 cd cms
-npx sanity deploy
+npx sanity cors add https://your-domain.com --credentials
 ```
-
-Add your production URL to CORS origins after deploy.
 
 ## Reference
 
