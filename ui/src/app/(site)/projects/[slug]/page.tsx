@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
-import {MobileProjectDescription, SidebarNav} from '@/components/SidebarNav'
+import {SidebarNav} from '@/components/SidebarNav'
 import {ProjectDetailSwiper} from '@/components/ProjectDetailSwiper'
 import {getProjectBySlug, getProjects, getProjectSlugs, getSiteSettings} from '@/lib/data'
 import {getMetadataBase, getSiteTitle, resolveLinkPreview} from '@/lib/seo'
@@ -66,7 +66,6 @@ export default async function ProjectPage({params}: PageProps) {
 
   return (
     <>
-      <MobileProjectDescription description={project.description} />
       <div className="outer-wrapper relative flex h-svh justify-between pt-3 pr-2.5 pb-2.5 pl-2.5 mobile:h-auto mobile:flex-col-reverse mobile:justify-end mobile:p-2 mobile:pt-0">
         <SidebarNav
           settings={settings}

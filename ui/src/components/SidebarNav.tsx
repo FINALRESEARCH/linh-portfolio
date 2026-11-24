@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import type {PortableTextBlock} from '@portabletext/types'
 import {NavProjectLink} from '@/components/NavProjectLink'
 import {PortableText} from '@/components/PortableText'
 import {CurrentYear} from '@/components/CurrentYear'
@@ -28,6 +27,10 @@ export function SidebarNav({
   currentSlug,
 }: SidebarNavProps) {
   const isProject = variant === 'project'
+  const currentDescription = isProject
+    ? projects.find((project) => project.slug === currentSlug)?.description
+    : undefined
+  const hasMobileCredits = Boolean(currentDescription?.length)
   const name = settings?.name || 'LINH THỊ NGUYỄN'
   const tagline = settings?.tagline || 'Styling & Creative direction'
   const email = settings?.email || 'l.tn@outlook.com'
@@ -105,6 +108,18 @@ export function SidebarNav({
   )
 
   /*
+   * Mobile credits: first line sits at the bottom of the first screen (where
+   * the last line of the old bottom-pinned block sat); extra lines flow down
+   * and push the rest of the nav with them instead of growing up under the
+   * image.
+   */
+  const mobileCredits = hasMobileCredits ? (
+    <div className="hidden mobile:order-1 mobile:flex mobile:flex-col mobile:items-start">
+      <PortableText value={currentDescription!} className={cn(finePrint, 'richtext')} />
+    </div>
+  ) : null
+
+  /*
    * One layout for home and project pages (Webflow `.nav-wrapper` spacing:
    * 8rem below the bio, copyright in flow at the bottom so short viewports
    * scroll instead of overlapping). Mobile (<=479): the nav starts below the
@@ -114,27 +129,22 @@ export function SidebarNav({
     <div
       className={cn(
         'nav-wrapper flex min-w-[25dvw] flex-col items-start justify-between gap-8 pr-[5dvw] mobile:absolute mobile:top-[100svh] mobile:min-w-0 mobile:items-stretch mobile:pb-2',
-        isProject ? 'mobile:gap-[6svh] mobile:pt-[6svh]' : 'mobile:gap-24 mobile:pt-[4svh]',
+        isProject ? 'mobile:gap-[6svh]' : 'mobile:gap-24 mobile:pt-[4svh]',
+        // 10px = last paragraph's margin, 0.7rem = one mobile credits line
+        isProject &&
+          (hasMobileCredits
+            ? 'mobile:top-[calc(100svh-10px-0.7rem)]'
+            : 'mobile:pt-[6svh]'),
       )}
     >
       <div className="flex flex-col items-start mobile:contents">
+        {mobileCredits}
         {bio}
         <div className="mt-32 mobile:mt-0 mobile:contents">{index}</div>
         {credits}
         <div className="mt-16 mobile:mt-0 mobile:contents">{contact}</div>
       </div>
       {copyright}
-    </div>
-  )
-}
-
-/** Mobile-only credits pinned to the bottom of the first screen (project pages) */
-export function MobileProjectDescription({description}: {description?: PortableTextBlock[]}) {
-  if (!description?.length) return null
-
-  return (
-    <div className="hidden mobile:absolute mobile:right-0 mobile:bottom-0 mobile:left-2 mobile:flex mobile:flex-col mobile:items-start">
-      <PortableText value={description} className={cn(finePrint, 'richtext')} />
     </div>
   )
 }
