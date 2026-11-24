@@ -111,10 +111,11 @@ export function SidebarNav({
    * Mobile credits: first line sits at the bottom of the first screen (where
    * the last line of the old bottom-pinned block sat); extra lines flow down
    * and push the rest of the nav with them instead of growing up under the
-   * image.
+   * image. Max width stops lines short of the arrows (8px left gutter + 56px
+   * of arrows + 8px gap = 72px).
    */
   const mobileCredits = hasMobileCredits ? (
-    <div className="hidden mobile:order-1 mobile:flex mobile:flex-col mobile:items-start">
+    <div className="hidden mobile:order-1 mobile:flex mobile:max-w-[calc(100vw-72px)] mobile:flex-col mobile:items-start">
       <PortableText value={currentDescription!} className={cn(finePrint, 'richtext')} />
     </div>
   ) : null
